@@ -1,12 +1,12 @@
 # BGD front-end example
-The purpose of this repo is to demonstrate how to structure front-end project to play nicely with [`fe-shared`][1] package
+The purpose of this repo is to demonstrate how to structure front-end project to play nicely with [`fe-shared`](https://github.com/bgd-labs/fe-shared) package
 
 ## What do we build?
 It’s a simple counter project which will showcase how interact with other blockchain, how to submit and wait for transaction and how to structure folders and structure.  
 Keep in mind the project is highly opinionated and is not meant to be universal
 
 ## The contract
-The whole contract is a bit modified example of [SimpleStorage example][2]
+The whole contract is a bit modified example of [SimpleStorage example](https://docs.soliditylang.org/en/develop/introduction-to-smart-contracts.html#storage-example)
 Source code looks like this 
 
 ```Solidity
@@ -33,14 +33,14 @@ contract SimpleStorage {
 
 ```
 
-If you want to see how front-end is build, skip to front-end part right away, otherwise here is how to run the project with local anvil environment from [foundry][3]
+If you want to see how front-end is build, skip to front-end part right away, otherwise here is how to run the project with local anvil environment from [foundry](https://github.com/foundry-rs/foundry)
 ### Running locally and deploying the contract
-1. Install [foundy][4] 
+1. Install [foundy](https://getfoundry.sh)
 2. In terminal run command `anvil`, the output should look something like this  
-	![Anvil output][image-1]
-3. Add one of the private keys from anvil output like so
+    ![Anvil output](./front-end/public/anvil_output.png)
+3. Add one of the private keys from anvil output like so (address can diffe)
 ```bash
-export PK= 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+export PK=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```
 4. Add anvil url to .env variables (don’t forget http:// before anvil url) 
 ```bash
@@ -52,7 +52,7 @@ forge script contracts/src/script/Counter.s.sol:CounterScript --fork-url $ANVIL_
 ```
 
 Once the contract is deployed you should have contract address like so
-![Contract deployed output][image-2]
+![Contract deployed output](./front-end/public/anvil_deploy.png)
 Let’s test if it’s working fine, in the same terminal session do
 ```bash
 export CONTRACT_ADDRESS=0x5fbdb2315678afecb367f032d93f642f64180aa3
@@ -69,7 +69,7 @@ cast call $CONTRACT_ADDRESS "getCurrentNumber()(uint256)" --rpc-url $ANVIL_RPC
 
 Hooray! The contract is deployed and running on local network. 
 
-### Optional generate [TypeChain][5] types
+### Optional generate [TypeChain](https://github.com/dethcrypto/TypeChain) types
 1. Install `npm i -g @typechain/ethers-v5 `
 ```bash
 	typechain --target ethers-v5 --out-dir ./contracts './out/Counter.sol/**.json'
@@ -78,11 +78,6 @@ _Contracts folder is already located in example package, no need to do anything_
 
 ## Front-end
 
-[1]:	https://github.com/bgd-labs/fe-shared
-[2]:	https://docs.soliditylang.org/en/develop/introduction-to-smart-contracts.html#storage-example
-[3]:	https://github.com/foundry-rs/foundry
-[4]:	https://getfoundry.sh/
-[5]:	https://github.com/dethcrypto/TypeChain
 
 [image-1]:	./front-end/public/anvil_output.png
 [image-2]:	./front-end/public/anvil_deploy.png
