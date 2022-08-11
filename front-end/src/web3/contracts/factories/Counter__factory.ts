@@ -4,7 +4,7 @@
 import { Signer, utils, Contract, ContractFactory, Overrides } from "ethers";
 import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import type { PromiseOrValue } from "../common";
-import type { SimpleStorage, SimpleStorageInterface } from "../SimpleStorage";
+import type { Counter, CounterInterface } from "../Counter";
 
 const _abi = [
   {
@@ -37,18 +37,18 @@ const _abi = [
 ];
 
 const _bytecode =
-  "0x608060405234801561001057600080fd5b50610105806100206000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c80632baeceb71460415780635c2fbc3e146049578063d09de08a14605e575b600080fd5b60476064565b005b60005460405190815260200160405180910390f35b60476080565b60005415607e5760008054908060788360a3565b91905055505b565b60008054908060788360b7565b634e487b7160e01b600052601160045260246000fd5b60008160af5760af608d565b506000190190565b600060001982141560c85760c8608d565b506001019056fea26469706673582212201060c1aa900e5c064a74727f831bfcd6ea4da17f95a9c4dd1adce8724df7553864736f6c634300080a0033";
+  "0x608060405234801561001057600080fd5b50610103806100206000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c80632baeceb71460415780635c2fbc3e146049578063d09de08a14605e575b600080fd5b60476064565b005b60005460405190815260200160405180910390f35b60476080565b60005415607e5760008054908060788360a3565b91905055505b565b60008054908060788360b7565b634e487b7160e01b600052601160045260246000fd5b60008160af5760af608d565b506000190190565b60006001820160c65760c6608d565b506001019056fea264697066735822122082bd97813b09682ee6afb145645442ca431fa3c44ada01eb9be34feb79c46a2664736f6c634300080d0033";
 
-type SimpleStorageConstructorParams =
+type CounterConstructorParams =
   | [signer?: Signer]
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: SimpleStorageConstructorParams
+  xs: CounterConstructorParams
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
-export class SimpleStorage__factory extends ContractFactory {
-  constructor(...args: SimpleStorageConstructorParams) {
+export class Counter__factory extends ContractFactory {
+  constructor(...args: CounterConstructorParams) {
     if (isSuperArgs(args)) {
       super(...args);
     } else {
@@ -58,30 +58,30 @@ export class SimpleStorage__factory extends ContractFactory {
 
   override deploy(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<SimpleStorage> {
-    return super.deploy(overrides || {}) as Promise<SimpleStorage>;
+  ): Promise<Counter> {
+    return super.deploy(overrides || {}) as Promise<Counter>;
   }
   override getDeployTransaction(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
-  override attach(address: string): SimpleStorage {
-    return super.attach(address) as SimpleStorage;
+  override attach(address: string): Counter {
+    return super.attach(address) as Counter;
   }
-  override connect(signer: Signer): SimpleStorage__factory {
-    return super.connect(signer) as SimpleStorage__factory;
+  override connect(signer: Signer): Counter__factory {
+    return super.connect(signer) as Counter__factory;
   }
 
   static readonly bytecode = _bytecode;
   static readonly abi = _abi;
-  static createInterface(): SimpleStorageInterface {
-    return new utils.Interface(_abi) as SimpleStorageInterface;
+  static createInterface(): CounterInterface {
+    return new utils.Interface(_abi) as CounterInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): SimpleStorage {
-    return new Contract(address, _abi, signerOrProvider) as SimpleStorage;
+  ): Counter {
+    return new Contract(address, _abi, signerOrProvider) as Counter;
   }
 }

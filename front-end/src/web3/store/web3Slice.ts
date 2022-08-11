@@ -7,13 +7,12 @@ import {
 } from "../../packages/src/web3/store/walletSlice";
 
 import { ethers, providers } from "ethers";
-import { IncrementDartaService } from "../services/incrementDataService";
+import { CounterDataService } from "../services/counterDataService";
 
 export type Web3Slice = BaseWeb3Slice & {
   // here application custom properties
   rpcProvider: ethers.providers.JsonRpcBatchProvider;
-  incrementDataService: IncrementDartaService;
-  fetchCurrentNumber: () => Promise<void>;
+  counterDataService: CounterDataService;
 };
 
 // having separate rpc provider for reading data only
@@ -22,16 +21,17 @@ export const getDefaultRPCProviderForReadData = () => {
 };
 
 export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
-  rpcProvider: getDefaultRPCProviderForReadData(),
-  incrementDataService: new IncrementDartaService(
-    getDefaultRPCProviderForReadData()
-  ),
-  fetchCurrentNumber: async () => {
-    const currentNumber = await get().incrementDataService.fetchCurrentNumber()
-    console.log(currentNumber.toNumber(), 'currentNumber')
-  },
   ...createWeb3BaseSlice({
-    walletConnected: () => {},
+    walletConnected: () => {
+      const activeWallet = get().activeWallet;
+      if (activeWallet) {
+        get().counterDataService.connectSigner(activeWallet.signer);
+      }
+    },
     getAddChainParameters,
   })(set, get),
+  rpcProvider: getDefaultRPCProviderForReadData(),
+  counterDataService: new CounterDataService(
+    getDefaultRPCProviderForReadData()
+  ),
 });
