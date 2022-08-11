@@ -1,6 +1,3 @@
-[submodule "front-end/src/packages"]
-	path = front-end/src/packages
-	url = https://github.com/bgd-labs/fe-shared
 [submodule "contracts/lib/forge-std"]
 	path = contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
