@@ -73,7 +73,7 @@ Hooray! The contract is deployed and running on local network.
 1. Install `npm i -g @typechain/ethers-v5 `
 ```bash
 	typechain --target ethers-v5 --out-dir ./contracts './out/Counter.sol/**.json'
-	```
+```
 _Contracts folder is already located in example package, no need to do anything_
 
 ## Front-end
