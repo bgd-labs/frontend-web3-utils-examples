@@ -1,3 +1,0 @@
-[submodule "src/packages"]
-	path = src/packages
-	url = https://github.com/bgd-labs/fe-shared
