@@ -46,9 +46,10 @@ export PK=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 ```bash
 export ANVIL_RPC=http://127.0.0.1:8545
 ```
+5. Install dependencies `cd contracts && forge install`
 6. Deploy `Counter` contract to anvil go to contracts folder and execute
 ```bash
-forge script contracts/script/Counter.s.sol:CounterScript --fork-url $ANVIL_RPC --private-key $PK --broadcast
+forge script script/Counter.s.sol:CounterScript --fork-url $ANVIL_RPC --private-key $PK --broadcast
 ```
 
 Once the contract is deployed you should have contract address like so
