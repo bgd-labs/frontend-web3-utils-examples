@@ -8,6 +8,7 @@ import {
 
 import { ethers, providers } from "ethers";
 import { CounterDataService } from "../services/counterDataService";
+import { DESIRED_CHAIN_ID, RPC_URL } from "../../utils/constants";
 
 export type Web3Slice = BaseWeb3Slice & {
   // here application custom properties
@@ -17,7 +18,7 @@ export type Web3Slice = BaseWeb3Slice & {
 
 // having separate rpc provider for reading data only
 export const getDefaultRPCProviderForReadData = () => {
-  return new providers.JsonRpcBatchProvider("https://eth-goerli.g.alchemy.com/v2/d0dxbHXgIF7k33SapC7h6KCWkwXP4iNS");
+  return new providers.JsonRpcBatchProvider(RPC_URL);
 };
 
 export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
@@ -29,7 +30,7 @@ export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
       }
     },
     getAddChainParameters,
-    desiredChainID: 5
+    desiredChainID: DESIRED_CHAIN_ID
   })(set, get),
   rpcProvider: getDefaultRPCProviderForReadData(),
   counterDataService: new CounterDataService(
