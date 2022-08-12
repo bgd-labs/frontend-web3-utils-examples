@@ -1,3 +1,4 @@
+import { CounterSlice } from "../../counter/store/counterSlice";
 import { StoreSlice } from "../../packages/src/types/store";
 
 import {
@@ -9,6 +10,7 @@ import { Web3Slice } from "../../packages/src/web3/store/walletSlice";
 import { getDefaultRPCProviderForReadData } from "../../web3/store/web3Slice";
 
 const providers = {
+  // ZERO because it's tx.chainID returns 0, although suppose to return 5
   0: getDefaultRPCProviderForReadData(),
 };
 
@@ -28,15 +30,15 @@ export type TransactionsSlice = ITransactionsSlice<TransactionUnion>;
 
 export const createTransactionsSlice: StoreSlice<
   TransactionsSlice,
-  Web3Slice
+  Web3Slice & CounterSlice
 > = (set, get) => ({
   ...createBaseTransactionsSlice<TransactionUnion>({
     txStatusChangedCallback: (data) => {
       switch (data.type) {
         case "increment":
-          console.log("refetch value");
+          get().getCounterValue()
         case "decrement":
-          console.log("refetch value")
+          get().getCounterValue()
       }
     },
     providers,

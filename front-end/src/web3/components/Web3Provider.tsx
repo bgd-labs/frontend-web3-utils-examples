@@ -8,7 +8,7 @@ export default function Web3Provider() {
       connectorsInitProps={{
         appName: 'AAVEGovernanceV3',
         chains: CHAINS,
-        desiredChainId: 1,
+        desiredChainId: 5,
       }}
       useStore={useStore}
     />

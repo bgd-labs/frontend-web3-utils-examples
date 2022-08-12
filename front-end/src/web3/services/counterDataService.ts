@@ -1,4 +1,5 @@
 import { providers } from "ethers";
+import { COUNTER_ADDRESS } from "../../utils/constants";
 import { Counter } from "../contracts/Counter";
 import { Counter__factory } from "../contracts/factories/Counter__factory";
 
@@ -9,7 +10,7 @@ export class CounterDataService {
   constructor(provider: providers.JsonRpcBatchProvider) {
     this.rpcProvider = provider;
     this.counterFactory = Counter__factory.connect(
-      "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      COUNTER_ADDRESS,
       this.rpcProvider
     );
   }

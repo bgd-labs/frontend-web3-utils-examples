@@ -48,10 +48,10 @@ export function getAddChainParameters(
 export const CHAINS: {
   [chainId: number]: BasicChainInformation | ExtendedChainInformation;
 } = {
-  1: {
-    urls: ['http://127.0.0.1:8545'],
+  5: {
+    urls: ['https://eth-goerli.g.alchemy.com/v2/d0dxbHXgIF7k33SapC7h6KCWkwXP4iNS'],
     nativeCurrency: ETH,
-    name: 'Custom deployment',
+    name: 'Goereli testnet',
     blockExplorerUrls: ['https://etherscan.io'],
   },
 };

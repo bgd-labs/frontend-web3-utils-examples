@@ -17,7 +17,7 @@ export type Web3Slice = BaseWeb3Slice & {
 
 // having separate rpc provider for reading data only
 export const getDefaultRPCProviderForReadData = () => {
-  return new providers.JsonRpcBatchProvider("http://127.0.0.1:8545");
+  return new providers.JsonRpcBatchProvider("https://eth-goerli.g.alchemy.com/v2/d0dxbHXgIF7k33SapC7h6KCWkwXP4iNS");
 };
 
 export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
@@ -29,6 +29,7 @@ export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
       }
     },
     getAddChainParameters,
+    desiredChainID: 5
   })(set, get),
   rpcProvider: getDefaultRPCProviderForReadData(),
   counterDataService: new CounterDataService(
