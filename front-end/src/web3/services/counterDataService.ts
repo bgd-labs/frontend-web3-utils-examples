@@ -4,19 +4,17 @@ import { Counter } from "../contracts/Counter";
 import { Counter__factory } from "../contracts/factories/Counter__factory";
 
 export class CounterDataService {
-  private rpcProvider: providers.JsonRpcBatchProvider;
   private counterFactory: Counter;
-  private signer?: providers.JsonRpcSigner;
+  private counterConnecteFactory?: Counter;
   constructor(provider: providers.JsonRpcBatchProvider) {
-    this.rpcProvider = provider;
     this.counterFactory = Counter__factory.connect(
       COUNTER_ADDRESS,
-      this.rpcProvider
+      provider
     );
   }
 
   public connectSigner(signer: providers.JsonRpcSigner) {
-    this.signer = signer;
+    this.counterConnecteFactory = this.counterFactory.connect(signer);
   }
 
   async fetchCurrentNumber() {
@@ -24,18 +22,16 @@ export class CounterDataService {
   }
 
   async increment() {
-    if (this.signer) {
-      const connectedSigner = this.counterFactory.connect(this.signer);
-      return connectedSigner.increment()
+    if (this.counterConnecteFactory) {
+      return this.counterConnecteFactory.increment()
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS')
     }
   }
 
   async decrement() {
-    if (this.signer) {
-      const connectedSigner = this.counterFactory.connect(this.signer);
-      return connectedSigner.decrement();
+    if (this.counterConnecteFactory) {
+      return this.counterConnecteFactory.decrement();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS')
     }
