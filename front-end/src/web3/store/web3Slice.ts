@@ -56,7 +56,7 @@ export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
         get().counterDataService.connectSigner(activeWallet.signer);
       }
     },
-    getAddChainParameters: chainInfoHelpers.getAddChainParameters,
+    getChainParameters: chainInfoHelpers.getChainParameters,
     desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
   rpcProvider: getDefaultRPCProviderForReadData(),
