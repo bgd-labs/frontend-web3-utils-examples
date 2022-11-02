@@ -1,5 +1,4 @@
 import { StoreSlice } from "../../packages/src/types/store";
-import { getAddChainParameters } from "../../utils/chains";
 
 import {
   createWeb3Slice as createWeb3BaseSlice,
@@ -9,6 +8,34 @@ import {
 import { ethers, providers } from "ethers";
 import { CounterDataService } from "../services/counterDataService";
 import { DESIRED_CHAIN_ID, RPC_URL } from "../../utils/constants";
+import {
+  BasicChainInformation,
+  ExtendedChainInformation,
+} from "../../packages/src";
+import { AddEthereumChainParameter } from "@web3-react/types";
+import { ChainInformation, initChainInformationConfig } from "../../packages/src/utils/chainInfoHelpers";
+
+const ETH: AddEthereumChainParameter["nativeCurrency"] = {
+  name: "Ether",
+  symbol: "ETH",
+  decimals: 18,
+};
+
+
+export const CHAINS: {
+  [chainId: number]: ChainInformation;
+} = {
+  5: {
+    urls: [
+      RPC_URL,
+    ],
+    nativeCurrency: ETH,
+    name: "Goereli testnet",
+    blockExplorerUrls: ["https://etherscan.io"],
+  },
+};
+
+export const chainInfoHelpers = initChainInformationConfig(CHAINS);
 
 export type Web3Slice = BaseWeb3Slice & {
   // here application custom properties
@@ -18,7 +45,7 @@ export type Web3Slice = BaseWeb3Slice & {
 
 // having separate rpc provider for reading data only
 export const getDefaultRPCProviderForReadData = () => {
-  return new providers.JsonRpcBatchProvider(RPC_URL);
+  return chainInfoHelpers.providerInstances[5].instance
 };
 
 export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
@@ -29,8 +56,8 @@ export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
         get().counterDataService.connectSigner(activeWallet.signer);
       }
     },
-    getAddChainParameters,
-    desiredChainID: DESIRED_CHAIN_ID
+    getChainParameters: chainInfoHelpers.getChainParameters,
+    desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
   rpcProvider: getDefaultRPCProviderForReadData(),
   counterDataService: new CounterDataService(
