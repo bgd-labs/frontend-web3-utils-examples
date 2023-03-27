@@ -1,7 +1,8 @@
 import { BigNumber } from "ethers";
 import { StoreSlice } from "../../packages/src";
 import { TransactionsSlice } from "../../transactions/store/transactionsSlice";
-import { Web3Slice } from "../../web3/store/web3Slice";
+import { IWeb3Slice } from "../../web3/store/web3Slice";
+import { DESIRED_CHAIN_ID } from './../../utils/constants';
 
 export interface CounterSlice {
   counterLoading: boolean;
@@ -13,7 +14,7 @@ export interface CounterSlice {
 
 export const createCounterSlice: StoreSlice<
   CounterSlice,
-  Web3Slice & TransactionsSlice
+  IWeb3Slice & TransactionsSlice
 > = (set, get) => ({
   increment: async () => {
     await get().executeTx({
@@ -21,6 +22,7 @@ export const createCounterSlice: StoreSlice<
       params: {
         type: 'increment',
         payload: {},
+        desiredChainID: DESIRED_CHAIN_ID
       },
     });
   },
@@ -30,6 +32,7 @@ export const createCounterSlice: StoreSlice<
       params: {
         type: 'decrement',
         payload: {},
+        desiredChainID: DESIRED_CHAIN_ID
       },
     });
   },

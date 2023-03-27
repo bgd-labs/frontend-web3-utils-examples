@@ -1,8 +1,9 @@
+import { TransactionsSlice } from './../../transactions/store/transactionsSlice';
 import { StoreSlice } from "../../packages/src/types/store";
 
 import {
-  createWeb3Slice as createWeb3BaseSlice,
-  Web3Slice as BaseWeb3Slice,
+  createWalletSlice,
+  IWalletSlice,
 } from "../../packages/src/web3/store/walletSlice";
 
 import { ethers, providers } from "ethers";
@@ -37,30 +38,31 @@ export const CHAINS: {
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
 
-export type Web3Slice = BaseWeb3Slice & {
-  // here application custom properties
-  rpcProvider: ethers.providers.JsonRpcBatchProvider;
+export type IWeb3Slice = IWalletSlice & {
   counterDataService: CounterDataService;
+  connectSigner: () => void;
 };
 
 // having separate rpc provider for reading data only
 export const getDefaultRPCProviderForReadData = () => {
-  return chainInfoHelpers.providerInstances[5].instance
+  return chainInfoHelpers.providerInstances[5].instance;
 };
 
-export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
-  ...createWeb3BaseSlice({
+export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (set, get) => ({
+  ...createWalletSlice({
     walletConnected: () => {
-      const activeWallet = get().activeWallet;
-      if (activeWallet) {
-        get().counterDataService.connectSigner(activeWallet.signer);
-      }
+      get().connectSigner();
     },
     getChainParameters: chainInfoHelpers.getChainParameters,
     desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
-  rpcProvider: getDefaultRPCProviderForReadData(),
   counterDataService: new CounterDataService(
     getDefaultRPCProviderForReadData()
   ),
+  connectSigner() {
+    const activeWallet = get().activeWallet;
+    if (activeWallet?.signer) {
+      get().counterDataService.connectSigner(activeWallet.signer);
+    }
+  },
 });
