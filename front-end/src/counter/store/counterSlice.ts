@@ -10,6 +10,8 @@ export interface CounterSlice {
   increment: () => Promise<void>;
   decrement: () => Promise<void>;
   getCounterValue: () => Promise<void>;
+  incrementGelato: () => Promise<void>;
+  decrementGelato: () => Promise<void>;
 }
 
 export const createCounterSlice: StoreSlice<
@@ -29,6 +31,26 @@ export const createCounterSlice: StoreSlice<
   decrement: async () => {
     await get().executeTx({
       body: () => get().counterDataService.decrement(),
+      params: {
+        type: 'decrement',
+        payload: {},
+        desiredChainID: DESIRED_CHAIN_ID
+      },
+    });
+  },
+  incrementGelato: async () => {
+    await get().executeTx({
+      body: () => get().counterDataService.incrementGelato(),
+      params: {
+        type: 'increment',
+        payload: {},
+        desiredChainID: DESIRED_CHAIN_ID
+      },
+    });
+  },
+  decrementGelato: async () => {
+    await get().executeTx({
+      body: () => get().counterDataService.decrementGelato(),
       params: {
         type: 'decrement',
         payload: {},

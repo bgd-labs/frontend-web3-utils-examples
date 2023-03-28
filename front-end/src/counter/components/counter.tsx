@@ -9,6 +9,8 @@ export const Counter = () => {
 
   const increment = useStore((store) => store.increment);
   const decrement = useStore((store) => store.decrement);
+  const incrementGelato = useStore((store) => store.incrementGelato);
+  const decrementGelato = useStore((store) => store.decrementGelato);
 
   useEffect(() => {
     getCounterValue();
@@ -20,6 +22,10 @@ export const Counter = () => {
       <button onClick={increment}>+</button>
       {loading ? "loading" : counterValue}
       <button onClick={decrement}>-</button>
+      <br />
+      Gelato:
+      <button onClick={incrementGelato}>+</button>
+      <button onClick={decrementGelato}>-</button>
     </div>
   );
 };
