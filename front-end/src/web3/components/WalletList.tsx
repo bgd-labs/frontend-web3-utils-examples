@@ -37,6 +37,13 @@ export const WalletList = () => {
           : ''}
       </div>
       <WalletListItem walletType="Impersonated" />
+      <div>
+        Account{' '}
+        {activeWallet?.walletType == 'GnosisSafe'
+          ? activeWallet.accounts
+          : ''}
+      </div>
+      <WalletListItem walletType="GnosisSafe" />
     </div>
   );
 };
