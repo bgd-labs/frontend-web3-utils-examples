@@ -54,7 +54,7 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (set, 
       get().connectSigner();
     },
     getChainParameters: chainInfoHelpers.getChainParameters,
-    desiredChainID: DESIRED_CHAIN_ID,
+    // desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
   counterDataService: new CounterDataService(
     getDefaultRPCProviderForReadData()

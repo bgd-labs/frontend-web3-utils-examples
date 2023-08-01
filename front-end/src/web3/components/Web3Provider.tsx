@@ -10,7 +10,8 @@ export default function Web3Provider() {
         appName: "AAVEGovernanceV3",
         chains: CHAINS,
         desiredChainId: DESIRED_CHAIN_ID,
-        urls: chainInfoHelpers.urls
+        urls: chainInfoHelpers.urls,
+        wcProjectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || ''
       }}
       useStore={useStore}
     />
