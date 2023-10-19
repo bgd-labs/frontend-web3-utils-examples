@@ -1,3 +1,4 @@
+import { goerli } from 'viem/chains';
 import { TransactionsSlice } from './../../transactions/store/transactionsSlice';
 import { StoreSlice } from "../../packages/src/types/store";
 
@@ -6,34 +7,15 @@ import {
   IWalletSlice,
 } from "../../packages/src/web3/store/walletSlice";
 
-import { ethers, providers } from "ethers";
 import { CounterDataService } from "../services/counterDataService";
-import { DESIRED_CHAIN_ID, RPC_URL } from "../../utils/constants";
-import {
-  BasicChainInformation,
-  ExtendedChainInformation,
-} from "../../packages/src";
-import { AddEthereumChainParameter } from "@web3-react/types";
-import { ChainInformation, initChainInformationConfig } from "../../packages/src/utils/chainInfoHelpers";
 
-const ETH: AddEthereumChainParameter["nativeCurrency"] = {
-  name: "Ether",
-  symbol: "ETH",
-  decimals: 18,
-};
-
+import { initChainInformationConfig } from "../../packages/src/utils/chainInfoHelpers";
+import { Chain } from 'wagmi';
 
 export const CHAINS: {
-  [chainId: number]: ChainInformation;
+  [chainId: number]: Chain;
 } = {
-  5: {
-    urls: [
-      RPC_URL,
-    ],
-    nativeCurrency: ETH,
-    name: "Goereli testnet",
-    blockExplorerUrls: ["https://etherscan.io"],
-  },
+  5: goerli
 };
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
@@ -62,7 +44,8 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (set, 
   connectSigner() {
     const activeWallet = get().activeWallet;
     if (activeWallet?.signer) {
-      get().counterDataService.connectSigner(activeWallet.signer);
+      // TODO: add wallet client
+      // get().counterDataService.connectSigner(activeWallet.signer);
     }
   },
 });

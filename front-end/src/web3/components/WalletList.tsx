@@ -15,6 +15,13 @@ export const WalletList = () => {
       </div>
       <WalletListItem walletType="Metamask" />
 
+      <div>Wallet type Injected</div>
+      <div>
+        Account{' '}
+        {activeWallet?.walletType === 'Injected' ? activeWallet.accounts : ''}
+      </div>
+      <WalletListItem walletType="Injected" />
+
       <div>Wallet type Coinbase</div>
       <div>
         Account{' '}
