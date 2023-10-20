@@ -1,8 +1,6 @@
-import { providers, BytesLike } from "ethers";
+import { BytesLike } from "ethers";
 import { GelatoRelay, SponsoredCallRequest } from "@gelatonetwork/relay-sdk";
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from "../../utils/constants";
-import { Counter } from "../contracts/Counter";
-import { Counter__factory } from "../contracts/factories/Counter__factory";
 import { getContract, encodeAbiParameters } from 'viem'
 import { PublicClient, WalletClient } from "wagmi";
 

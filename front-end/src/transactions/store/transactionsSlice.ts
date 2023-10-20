@@ -8,11 +8,10 @@ import {
 } from "../../packages/src/web3/store/transactionsSlice";
 import { IWalletSlice } from "../../packages/src/web3/store/walletSlice";
 import { getDefaultRPCProviderForReadData } from "../../web3/store/web3Slice";
+import {goerli} from 'viem/chains';
 
-const providers = {
-  // ZERO because it's tx.chainID returns 0, although suppose to return 5
-  0: getDefaultRPCProviderForReadData(),
-  5: getDefaultRPCProviderForReadData(),
+const clients = {
+  [goerli.id]: getDefaultRPCProviderForReadData(),
 };
 
 type IncrementTX = BaseTx & {
@@ -42,6 +41,6 @@ export const createTransactionsSlice: StoreSlice<
           get().getCounterValue()
       }
     },
-    defaultProviders: providers,
+    defaultClients: clients,
   })(set, get),
 });
