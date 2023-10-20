@@ -6,8 +6,17 @@ import { Counter } from "../src/counter/components/counter";
 import { useStore } from "../src/store";
 import { WalletList } from "../src/web3/components/WalletList";
 import styles from "../styles/Home.module.css";
+import {useAccount, useNetwork} from 'wagmi';
 
 const Home: NextPage = () => {
+  const { connector: activeConnector, isConnected } = useAccount()
+  const { chain, chains } = useNetwork()
+
+  console.log('activeConnector', activeConnector)
+  console.log('isConnected', isConnected)
+  console.log('chain', chain)
+  console.log('chains', chains)
+
   return (
     <div className={styles.container}>
       <Head>
