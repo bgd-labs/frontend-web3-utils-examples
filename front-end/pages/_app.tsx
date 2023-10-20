@@ -5,9 +5,11 @@ import WagmiConfigProviderWrapper from "../src/web3/components/Web3Provider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfigProviderWrapper>
+    <>
+      <WagmiConfigProviderWrapper />
+
       <Component {...pageProps}/>
-    </WagmiConfigProviderWrapper>
+    </>
   );
 }
 

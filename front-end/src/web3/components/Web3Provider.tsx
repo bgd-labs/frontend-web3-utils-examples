@@ -4,7 +4,7 @@ import { useStore } from "../../store";
 import { DESIRED_CHAIN_ID } from "../../utils/constants";
 import { chainInfoHelpers, CHAINS } from "../store/web3Slice";
 
-export default function WagmiConfigProviderWrapper({ children }: { children: React.ReactNode }) {
+export default function WagmiConfigProviderWrapper() {
   return (
     <WagmiProvider
       connectorsInitProps={{
@@ -22,8 +22,6 @@ export default function WagmiConfigProviderWrapper({ children }: { children: Rea
         },
       }}
       useStore={useStore}
-    >
-      {children}
-    </WagmiProvider>
+    />
   );
 }

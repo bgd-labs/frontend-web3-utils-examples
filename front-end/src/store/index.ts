@@ -8,6 +8,7 @@ import {
 } from '../transactions/store/transactionsSlice';
 import { createWeb3Slice, IWeb3Slice } from '../web3/store/web3Slice';
 
+
 type RootState = IWeb3Slice & TransactionsSlice & CounterSlice;
 
 const createRootSlice = (
@@ -20,3 +21,6 @@ const createRootSlice = (
 });
 
 export const useStore = create(devtools(createRootSlice, { serialize: true }));
+
+
+

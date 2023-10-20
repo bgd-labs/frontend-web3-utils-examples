@@ -1,7 +1,7 @@
 import { BytesLike } from "ethers";
 import { GelatoRelay, SponsoredCallRequest } from "@gelatonetwork/relay-sdk";
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from "../../utils/constants";
-import { getContract, encodeAbiParameters } from 'viem'
+import { getContract, encodeFunctionData } from 'viem'
 import { PublicClient, WalletClient } from "wagmi";
 
 
@@ -38,8 +38,9 @@ const _abi = [
 
 export class CounterDataService {
   private counterFactory;
+  private connectedContractFactory;
   private publicClient: PublicClient;
-  private walletClient: WalletClient | null = null;;
+  private walletClient: WalletClient | null = null;
   constructor(publicClient: PublicClient) {
     this.publicClient = publicClient;
     this.counterFactory = getContract({
@@ -47,14 +48,22 @@ export class CounterDataService {
       abi: _abi,
       publicClient,
     })
+    if (this.walletClient) {
+      this.connectedContractFactory = getContract({
+        address: COUNTER_ADDRESS,
+        abi: this.counterFactory.abi,
+        publicClient: this.publicClient,
+        walletClient: this.walletClient,
+      })
+    }
   }
 
   public connectSigner(walletClient: WalletClient) {
-    this.counterFactory = getContract({
+    this.connectedContractFactory = getContract({
       address: COUNTER_ADDRESS,
-      abi: _abi,
+      abi: this.counterFactory.abi,
       publicClient: this.publicClient,
-      walletClient
+      walletClient: walletClient,
     })
     this.walletClient = walletClient;
   }
@@ -64,27 +73,26 @@ export class CounterDataService {
   }
 
   async increment() {
-    if (this.counterFactory && this.walletClient) {
-      // TODO: update with wallet client check
-      return this.counterFactory.write.increment()
+    if (this.connectedContractFactory) {
+      return this.connectedContractFactory.write.increment();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS')
     }
   }
 
   async decrement() {
-    if (this.counterFactory && this.walletClient) {
-      // TODO: update with wallet client check
-      return this.counterFactory.write.decrement();
+    if (this.connectedContractFactory) {
+      return this.connectedContractFactory.write.increment();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS')
     }
   }
 
   async incrementGelato() {
-    if (this.counterFactory) {
+    if (this.connectedContractFactory) {
       const relay = new GelatoRelay();
-      const data = encodeAbiParameters(_abi[2].inputs, []);
+      const data = encodeFunctionData({ abi: this.counterFactory.abi, functionName: 'increment' });
+
       const request: SponsoredCallRequest = {
         chainId: DESIRED_CHAIN_ID,
         target: COUNTER_ADDRESS,
@@ -101,11 +109,10 @@ export class CounterDataService {
   }
 
   async decrementGelato() {
-    if (this.counterFactory) {
+    if (this.connectedContractFactory) {
       const relay = new GelatoRelay();
-      // const { data } = await this.counterConnectedFactory.populateTransaction.decrement();
-      const data = encodeAbiParameters(_abi[0].inputs, []);
-      
+      const data = encodeFunctionData({ abi: this.counterFactory.abi, functionName: 'decrement' });
+
       const request: SponsoredCallRequest = {
         chainId: DESIRED_CHAIN_ID,
         target: COUNTER_ADDRESS,

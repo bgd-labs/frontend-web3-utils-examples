@@ -1,13 +1,11 @@
 import { FC, useMemo } from 'react';
 import { WalletType } from '../../packages/src';
 import { useStore } from '../../store';
-import {useConnect} from 'wagmi';
-
 
 export const WalletListItem: FC<{
   walletType: WalletType;
 }> = ({ walletType }) => {
-  const { connect } = useConnect();
+
   const activeWallet = useStore(store => store.activeWallet);
   const connectWallet = useStore((state) => state.connectWallet);
   const disconnectActiveWallet = useStore(
@@ -22,7 +20,7 @@ export const WalletListItem: FC<{
     if (isActive) {
       await disconnectActiveWallet();
     } else {
-      await connectWallet(connect, walletType);
+      await connectWallet(walletType);
     }
   };
 
