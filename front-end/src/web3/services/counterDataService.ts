@@ -82,7 +82,7 @@ export class CounterDataService {
 
   async decrement() {
     if (this.connectedContractFactory) {
-      return this.connectedContractFactory.write.increment();
+      return this.connectedContractFactory.write.decrement();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS')
     }

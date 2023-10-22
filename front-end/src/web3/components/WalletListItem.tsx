@@ -28,7 +28,7 @@ export const WalletListItem: FC<{
     <>
       <button onClick={handleWalletClick}>
         {isActive ? 'disconnect' : 'connect'}
-        {walletType} {activeWallet?.chainId}
+        {walletType} {activeWallet?.chain?.id}
       </button>
       {/* {isActive && activeWallet?.wrongNetwork && (
         <button>
