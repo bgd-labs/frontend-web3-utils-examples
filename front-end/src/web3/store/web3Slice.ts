@@ -1,21 +1,19 @@
-import { goerli } from 'viem/chains';
-import { TransactionsSlice } from './../../transactions/store/transactionsSlice';
-import { StoreSlice } from "../../packages/src/types/store";
-
 import {
   createWalletSlice,
+  initChainInformationConfig,
   IWalletSlice,
-} from "../../packages/src/web3/store/walletSlice";
-
-import { CounterDataService } from "../services/counterDataService";
-
-import { initChainInformationConfig } from "../../packages/src/utils/chainInfoHelpers";
+  StoreSlice,
+} from '@bgd-labs/frontend-web3-utils';
+import { goerli } from 'viem/chains';
 import { Chain } from 'wagmi';
+
+import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
+import { CounterDataService } from '../services/counterDataService';
 
 export const CHAINS: {
   [chainId: number]: Chain;
 } = {
-  [goerli.id]: goerli
+  [goerli.id]: goerli,
 };
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
@@ -30,20 +28,21 @@ export const getDefaultRPCProviderForReadData = () => {
   return chainInfoHelpers.clientInstances[goerli.id].instance;
 };
 
-export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (set, get) => ({
+export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
+  set,
+  get,
+) => ({
   ...createWalletSlice({
     walletConnected: () => {
       get().connectSigner();
     },
-    // desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
   counterDataService: new CounterDataService(
-    getDefaultRPCProviderForReadData()
+    getDefaultRPCProviderForReadData(),
   ),
   connectSigner() {
     const activeWallet = get().activeWallet;
-    console.log('connectSigner', activeWallet)
-    if (activeWallet?.walletClient) {
+    if (activeWallet && activeWallet.walletClient) {
       get().counterDataService.connectSigner(activeWallet.walletClient);
     }
   },

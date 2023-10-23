@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
-import { useStore } from "../../store";
-import { selectCurrentCounteValue } from "../store/counterSelectors";
+import React, { useEffect } from 'react';
+
+import { useStore } from '../../store';
+import { selectCurrentCounterValue } from '../store/counterSelectors';
 
 export const Counter = () => {
   const getCounterValue = useStore((store) => store.getCounterValue);
   const loading = useStore((store) => store.counterLoading);
-  const counterValue = useStore(selectCurrentCounteValue);
+  const counterValue = useStore(selectCurrentCounterValue);
 
   const increment = useStore((store) => store.increment);
   const decrement = useStore((store) => store.decrement);
@@ -15,12 +16,11 @@ export const Counter = () => {
   useEffect(() => {
     getCounterValue();
   }, []);
-  
 
   return (
     <div>
       <button onClick={increment}>+</button>
-      {loading ? "loading" : counterValue}
+      {loading ? 'loading' : counterValue}
       <button onClick={decrement}>-</button>
       <br />
       Gelato:

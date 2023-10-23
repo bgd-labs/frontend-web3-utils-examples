@@ -1,10 +1,10 @@
 import React from 'react';
+
 import { useStore } from '../../store';
 import { WalletListItem } from './WalletListItem';
 
-
 export const WalletList = () => {
-  const activeWallet = useStore(store => store.activeWallet);
+  const activeWallet = useStore((store) => store.activeWallet);
 
   return (
     <div>
@@ -18,14 +18,14 @@ export const WalletList = () => {
       <div>Wallet type Coinbase</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType == 'Coinbase' ? activeWallet.address : ''}
+        {activeWallet?.walletType === 'Coinbase' ? activeWallet.address : ''}
       </div>
       <WalletListItem walletType="Coinbase" />
 
       <div>Wallet type Wallet connect</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType == 'WalletConnect'
+        {activeWallet?.walletType === 'WalletConnect'
           ? activeWallet.address
           : ''}
       </div>
@@ -33,9 +33,7 @@ export const WalletList = () => {
 
       <div>
         Account{' '}
-        {activeWallet?.walletType == 'GnosisSafe'
-          ? activeWallet.address
-          : ''}
+        {activeWallet?.walletType === 'GnosisSafe' ? activeWallet.address : ''}
       </div>
       <WalletListItem walletType="GnosisSafe" />
     </div>

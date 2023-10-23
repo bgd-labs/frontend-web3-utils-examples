@@ -1,14 +1,14 @@
-import { useConnect } from "wagmi";
-import { WagmiProvider } from "../../packages/src/web3/providers/WagmiProvider";
-import { useStore } from "../../store";
-import { DESIRED_CHAIN_ID } from "../../utils/constants";
-import { chainInfoHelpers, CHAINS } from "../store/web3Slice";
+import { WagmiProvider } from '@bgd-labs/frontend-web3-utils';
+
+import { useStore } from '../../store';
+import { DESIRED_CHAIN_ID } from '../../utils/constants';
+import { CHAINS } from '../store/web3Slice';
 
 export default function WagmiConfigProviderWrapper() {
   return (
     <WagmiProvider
       connectorsInitProps={{
-        appName: "AAVEGovernanceV3",
+        appName: 'AAVEGovernanceV3',
         chains: CHAINS,
         defaultChainId: DESIRED_CHAIN_ID,
         wcParams: {

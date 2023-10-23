@@ -1,40 +1,43 @@
-import { BytesLike } from "ethers";
-import { GelatoRelay, SponsoredCallRequest } from "@gelatonetwork/relay-sdk";
-import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from "../../utils/constants";
-import { getContract, encodeFunctionData } from 'viem'
-import { PublicClient, WalletClient } from "wagmi";
+import { GelatoRelay, SponsoredCallRequest } from '@gelatonetwork/relay-sdk';
+import {
+  encodeFunctionData,
+  getContract,
+  PublicClient,
+  WalletClient,
+} from 'viem';
 
+import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
 
 // TODO: replace this with the actual contract
 const _abi = [
   {
     inputs: [],
-    name: "decrement",
+    name: 'decrement',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "getCurrentNumber",
+    name: 'getCurrentNumber',
     outputs: [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "increment",
+    name: 'increment',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
-];
+] as const;
 
 export class CounterDataService {
   private counterFactory;
@@ -47,14 +50,14 @@ export class CounterDataService {
       address: COUNTER_ADDRESS,
       abi: _abi,
       publicClient,
-    })
+    });
     if (this.walletClient) {
       this.connectedContractFactory = getContract({
         address: COUNTER_ADDRESS,
         abi: this.counterFactory.abi,
         publicClient: this.publicClient,
         walletClient: this.walletClient,
-      })
+      });
     }
   }
 
@@ -64,7 +67,7 @@ export class CounterDataService {
       abi: this.counterFactory.abi,
       publicClient: this.publicClient,
       walletClient: walletClient,
-    })
+    });
     this.walletClient = walletClient;
   }
 
@@ -74,29 +77,34 @@ export class CounterDataService {
 
   async increment() {
     if (this.connectedContractFactory) {
+      // @ts-ignore
       return this.connectedContractFactory.write.increment();
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS')
+      throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 
   async decrement() {
     if (this.connectedContractFactory) {
+      // @ts-ignore
       return this.connectedContractFactory.write.decrement();
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS')
+      throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 
   async incrementGelato() {
     if (this.connectedContractFactory) {
       const relay = new GelatoRelay();
-      const data = encodeFunctionData({ abi: this.counterFactory.abi, functionName: 'increment' });
+      const data = encodeFunctionData({
+        abi: this.counterFactory.abi,
+        functionName: 'increment',
+      });
 
       const request: SponsoredCallRequest = {
-        chainId: DESIRED_CHAIN_ID,
+        chainId: BigInt(DESIRED_CHAIN_ID),
         target: COUNTER_ADDRESS,
-        data: data as BytesLike,
+        data: data,
       };
 
       return relay.sponsoredCall(
@@ -104,19 +112,22 @@ export class CounterDataService {
         process.env.NEXT_PUBLIC_GELATO_API_KEY || '',
       );
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS')
+      throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 
   async decrementGelato() {
     if (this.connectedContractFactory) {
       const relay = new GelatoRelay();
-      const data = encodeFunctionData({ abi: this.counterFactory.abi, functionName: 'decrement' });
+      const data = encodeFunctionData({
+        abi: this.counterFactory.abi,
+        functionName: 'decrement',
+      });
 
       const request: SponsoredCallRequest = {
-        chainId: DESIRED_CHAIN_ID,
+        chainId: BigInt(DESIRED_CHAIN_ID),
         target: COUNTER_ADDRESS,
-        data: data as BytesLike,
+        data: data,
       };
 
       return relay.sponsoredCall(
@@ -124,7 +135,7 @@ export class CounterDataService {
         process.env.NEXT_PUBLIC_GELATO_API_KEY || '',
       );
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS')
+      throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 }

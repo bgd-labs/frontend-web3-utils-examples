@@ -1,11 +1,9 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect } from "react";
-import { Counter } from "../src/counter/components/counter";
-import { useStore } from "../src/store";
-import { WalletList } from "../src/web3/components/WalletList";
-import styles from "../styles/Home.module.css";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+
+import { Counter } from '../src/counter/components/counter';
+import { WalletList } from '../src/web3/components/WalletList';
+import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   return (
