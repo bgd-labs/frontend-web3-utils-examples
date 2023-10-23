@@ -24,7 +24,7 @@ type DecrementTX = BaseTx & {
   payload: {};
 };
 
-type TransactionUnion = IncrementTX | DecrementTX;
+export type TransactionUnion = IncrementTX | DecrementTX;
 
 export type TransactionsSlice = ITransactionsSlice<TransactionUnion>;
 
