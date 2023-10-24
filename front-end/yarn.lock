@@ -1125,8 +1125,8 @@
     to-fast-properties "^2.0.0"
 
 "@bgd-labs/frontend-web3-utils@bgd-labs/fe-shared#test/lib":
-  version "0.2.1"
-  resolved "https://codeload.github.com/bgd-labs/fe-shared/tar.gz/598285ffb25ae30683cbda72f0ce3563d566827e"
+  version "0.2.294"
+  resolved "https://codeload.github.com/bgd-labs/fe-shared/tar.gz/a611d29cb2077fa3be85a4a7695dbe3d00f02dfd"
   dependencies:
     dayjs "^1.11.10"
     lodash "^4.17.21"

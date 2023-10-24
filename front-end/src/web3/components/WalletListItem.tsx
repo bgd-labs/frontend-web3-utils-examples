@@ -2,13 +2,15 @@ import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import { useMemo } from 'react';
 
 import { useStore } from '../../store';
+import { DESIRED_CHAIN_ID } from '../../utils/constants';
 
 export function WalletListItem({ walletType }: { walletType: WalletType }) {
-  const activeWallet = useStore((store) => store.activeWallet);
-  const connectWallet = useStore((state) => state.connectWallet);
-  const disconnectActiveWallet = useStore(
-    (state) => state.disconnectActiveWallet,
-  );
+  const {
+    activeWallet,
+    connectWallet,
+    disconnectActiveWallet,
+    setImpersonatedAccount,
+  } = useStore();
 
   const isActive = useMemo(() => {
     return activeWallet?.walletType === walletType;
@@ -18,7 +20,10 @@ export function WalletListItem({ walletType }: { walletType: WalletType }) {
     if (isActive) {
       await disconnectActiveWallet();
     } else {
-      await connectWallet(walletType);
+      if (walletType === 'Impersonated') {
+        setImpersonatedAccount('0x...'); // should be private key with 0x;
+      }
+      await connectWallet(walletType, DESIRED_CHAIN_ID);
     }
   };
 
