@@ -13,7 +13,16 @@ import { CounterDataService } from '../services/counterDataService';
 export const CHAINS: {
   [chainId: number]: Chain;
 } = {
-  [goerli.id]: goerli,
+  [goerli.id]: {
+    ...goerli,
+    rpcUrls: {
+      ...goerli.rpcUrls,
+      default: {
+        ...goerli.rpcUrls.default,
+        http: ['https://ethereum-goerli.publicnode.com'],
+      },
+    },
+  },
 };
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);

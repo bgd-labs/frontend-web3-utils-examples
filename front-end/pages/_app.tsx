@@ -8,7 +8,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <WagmiConfigProviderWrapper />
-
       <Component {...pageProps} />
     </>
   );

@@ -1125,14 +1125,15 @@
     to-fast-properties "^2.0.0"
 
 "@bgd-labs/frontend-web3-utils@bgd-labs/fe-shared#test/lib":
-  version "0.2.1"
-  resolved "https://codeload.github.com/bgd-labs/fe-shared/tar.gz/598285ffb25ae30683cbda72f0ce3563d566827e"
+  version "0.2.31"
+  resolved "https://codeload.github.com/bgd-labs/fe-shared/tar.gz/13e8a9630672d8f0003efbf9ac9b2a19f6458992"
   dependencies:
     dayjs "^1.11.10"
     lodash "^4.17.21"
     lodash-es "^4.17.21"
     viem "^1.16.6"
     wagmi "^1.4.5"
+    zustand "^4.4.4"
 
 "@coinbase/wallet-sdk@^3.6.6":
   version "3.7.2"
@@ -6052,5 +6053,12 @@ zustand@^4.3.1:
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.4.3.tgz#1d54cf7fa4507ad8bf58e2f13e08ddc8a6730128"
   integrity sha512-oRy+X3ZazZvLfmv6viIaQmtLOMeij1noakIsK/Y47PWYhT8glfXzQ4j0YcP5i0P0qI1A4rIB//SGROGyZhx91A==
+  dependencies:
+    use-sync-external-store "1.2.0"
+
+zustand@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.4.4.tgz#cc06202219972bd61cef1fd10105e6384ae1d5cf"
+  integrity sha512-5UTUIAiHMNf5+mFp7/AnzJXS7+XxktULFN0+D1sCiZWyX7ZG+AQpqs2qpYrynRij4QvoDdCD+U+bmg/cG3Ucxw==
   dependencies:
     use-sync-external-store "1.2.0"

@@ -8,12 +8,12 @@ export const WalletList = () => {
 
   return (
     <div>
-      <div>Wallet type Metamask</div>
+      <div>Wallet type Injected</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'Metamask' ? activeWallet.address : ''}
+        {activeWallet?.walletType === 'Injected' ? activeWallet.address : ''}
       </div>
-      <WalletListItem walletType="Metamask" />
+      <WalletListItem walletType="Injected" />
 
       <div>Wallet type Coinbase</div>
       <div>
@@ -36,6 +36,15 @@ export const WalletList = () => {
         {activeWallet?.walletType === 'GnosisSafe' ? activeWallet.address : ''}
       </div>
       <WalletListItem walletType="GnosisSafe" />
+
+      <div>Wallet type Impersonated</div>
+      <div>
+        Account{' '}
+        {activeWallet?.walletType === 'Impersonated'
+          ? activeWallet.address
+          : ''}
+      </div>
+      <WalletListItem walletType="Impersonated" />
     </div>
   );
 };
