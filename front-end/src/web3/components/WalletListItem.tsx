@@ -9,7 +9,7 @@ export function WalletListItem({ walletType }: { walletType: WalletType }) {
     activeWallet,
     connectWallet,
     disconnectActiveWallet,
-    setImpersonatedAccount,
+    setImpersonated,
   } = useStore();
 
   const isActive = useMemo(() => {
@@ -21,7 +21,7 @@ export function WalletListItem({ walletType }: { walletType: WalletType }) {
       await disconnectActiveWallet();
     } else {
       if (walletType === 'Impersonated') {
-        setImpersonatedAccount('0x...'); // should be private key with 0x;
+        setImpersonated(''); // can be account address (view only mode) or private key;
       }
       await connectWallet(walletType, DESIRED_CHAIN_ID);
     }
