@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bgd-labs/frontend-web3-utils": "bgd-labs/fe-shared#test/lib",
+    "@bgd-labs/frontend-web3-utils": "^0.2.5-7a54eb72b6b16d9d09ac04aa35ff3e1407e7809a.0",
     "@gelatonetwork/relay-sdk": "^5.5.2",
     "@wagmi/core": "^1.3.6",
     "dayjs": "^1.11.10",

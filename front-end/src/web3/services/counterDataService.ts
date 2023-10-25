@@ -1,10 +1,6 @@
 import { GelatoRelay, SponsoredCallRequest } from '@gelatonetwork/relay-sdk';
-import {
-  encodeFunctionData,
-  getContract,
-  PublicClient,
-  WalletClient,
-} from 'viem';
+import { PublicClient, WalletClient } from '@wagmi/core';
+import { encodeFunctionData, getContract } from 'viem';
 
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
 
@@ -41,34 +37,26 @@ const _abi = [
 
 export class CounterDataService {
   private counterFactory;
-  private connectedContractFactory;
   private publicClient: PublicClient;
-  private walletClient: WalletClient | null = null;
+  private walletClient: WalletClient | undefined = undefined;
   constructor(publicClient: PublicClient) {
     this.publicClient = publicClient;
     this.counterFactory = getContract({
       address: COUNTER_ADDRESS,
       abi: _abi,
       publicClient,
+      walletClient: this.walletClient,
     });
-    if (this.walletClient) {
-      this.connectedContractFactory = getContract({
-        address: COUNTER_ADDRESS,
-        abi: this.counterFactory.abi,
-        publicClient: this.publicClient,
-        walletClient: this.walletClient,
-      });
-    }
   }
 
   public connectSigner(walletClient: WalletClient) {
-    this.connectedContractFactory = getContract({
-      address: COUNTER_ADDRESS,
+    this.walletClient = walletClient;
+    this.counterFactory = getContract({
+      address: this.counterFactory.address,
       abi: this.counterFactory.abi,
       publicClient: this.publicClient,
-      walletClient: walletClient,
+      walletClient: this.walletClient,
     });
-    this.walletClient = walletClient;
   }
 
   async fetchCurrentNumber() {
@@ -76,25 +64,25 @@ export class CounterDataService {
   }
 
   async increment() {
-    if (this.connectedContractFactory) {
+    if (this.walletClient) {
       // @ts-ignore
-      return this.connectedContractFactory.write.increment();
+      return this.counterFactory.write.increment();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 
   async decrement() {
-    if (this.connectedContractFactory) {
+    if (this.walletClient) {
       // @ts-ignore
-      return this.connectedContractFactory.write.decrement();
+      return this.counterFactory.write.decrement();
     } else {
       throw new Error('CONNECT YOUR SIGNERSSSSS');
     }
   }
 
   async incrementGelato() {
-    if (this.connectedContractFactory) {
+    if (this.walletClient) {
       const relay = new GelatoRelay();
       const data = encodeFunctionData({
         abi: this.counterFactory.abi,
@@ -117,7 +105,7 @@ export class CounterDataService {
   }
 
   async decrementGelato() {
-    if (this.connectedContractFactory) {
+    if (this.walletClient) {
       const relay = new GelatoRelay();
       const data = encodeFunctionData({
         abi: this.counterFactory.abi,
