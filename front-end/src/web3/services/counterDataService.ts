@@ -3,37 +3,9 @@ import { PublicClient, WalletClient } from '@wagmi/core';
 import { encodeFunctionData, getContract } from 'viem';
 
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
+import { _abi as CounterAbi } from '../services/abi/CounterAbi';
 
 // TODO: replace this with the actual contract
-const _abi = [
-  {
-    inputs: [],
-    name: 'decrement',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getCurrentNumber',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'increment',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-] as const;
 
 export class CounterDataService {
   private counterFactory;
@@ -43,7 +15,7 @@ export class CounterDataService {
     this.publicClient = publicClient;
     this.counterFactory = getContract({
       address: COUNTER_ADDRESS,
-      abi: _abi,
+      abi: CounterAbi,
       publicClient,
       walletClient: this.walletClient,
     });
@@ -68,7 +40,7 @@ export class CounterDataService {
       // @ts-ignore
       return this.counterFactory.write.increment();
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS');
+      throw new Error('CONNECT YOUR SIGNER');
     }
   }
 
@@ -77,7 +49,7 @@ export class CounterDataService {
       // @ts-ignore
       return this.counterFactory.write.decrement();
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS');
+      throw new Error('CONNECT YOUR SIGNER');
     }
   }
 
