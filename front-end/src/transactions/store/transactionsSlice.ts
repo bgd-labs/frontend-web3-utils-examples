@@ -1,46 +1,48 @@
-import { CounterSlice } from "../../counter/store/counterSlice";
-import { StoreSlice } from "../../packages/src/types/store";
-
 import {
   BaseTx,
   createTransactionsSlice as createBaseTransactionsSlice,
   ITransactionsSlice,
-} from "../../packages/src/web3/store/transactionsSlice";
-import { Web3Slice } from "../../packages/src/web3/store/walletSlice";
-import { getDefaultRPCProviderForReadData } from "../../web3/store/web3Slice";
+  IWalletSlice,
+  StoreSlice,
+} from '@bgd-labs/frontend-web3-utils';
+import { goerli } from 'viem/chains';
 
-const providers = {
-  // ZERO because it's tx.chainID returns 0, although suppose to return 5
-  0: getDefaultRPCProviderForReadData(),
+import { CounterSlice } from '../../counter/store/counterSlice';
+import { getDefaultRPCProviderForReadData } from '../../web3/store/web3Slice';
+
+const clients = {
+  [goerli.id]: getDefaultRPCProviderForReadData(),
 };
 
 type IncrementTX = BaseTx & {
-  type: "increment";
+  type: 'increment';
   payload: {};
 };
 
 type DecrementTX = BaseTx & {
-  type: "decrement";
+  type: 'decrement';
   payload: {};
 };
 
-type TransactionUnion = IncrementTX | DecrementTX;
+export type TransactionUnion = IncrementTX | DecrementTX;
 
 export type TransactionsSlice = ITransactionsSlice<TransactionUnion>;
 
 export const createTransactionsSlice: StoreSlice<
   TransactionsSlice,
-  Web3Slice & CounterSlice
+  IWalletSlice & CounterSlice
 > = (set, get) => ({
   ...createBaseTransactionsSlice<TransactionUnion>({
     txStatusChangedCallback: (data) => {
       switch (data.type) {
-        case "increment":
-          get().getCounterValue()
-        case "decrement":
-          get().getCounterValue()
+        case 'increment':
+          get().getCounterValue();
+          break;
+        case 'decrement':
+          get().getCounterValue();
+          break;
       }
     },
-    providers,
+    defaultClients: clients,
   })(set, get),
 });

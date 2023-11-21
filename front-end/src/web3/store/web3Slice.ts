@@ -1,66 +1,58 @@
-import { StoreSlice } from "../../packages/src/types/store";
-
 import {
-  createWeb3Slice as createWeb3BaseSlice,
-  Web3Slice as BaseWeb3Slice,
-} from "../../packages/src/web3/store/walletSlice";
+  createWalletSlice,
+  initChainInformationConfig,
+  IWalletSlice,
+  StoreSlice,
+} from '@bgd-labs/frontend-web3-utils';
+import { goerli } from 'viem/chains';
+import { Chain } from 'wagmi';
 
-import { ethers, providers } from "ethers";
-import { CounterDataService } from "../services/counterDataService";
-import { DESIRED_CHAIN_ID, RPC_URL } from "../../utils/constants";
-import {
-  BasicChainInformation,
-  ExtendedChainInformation,
-} from "../../packages/src";
-import { AddEthereumChainParameter } from "@web3-react/types";
-import { ChainInformation, initChainInformationConfig } from "../../packages/src/utils/chainInfoHelpers";
-
-const ETH: AddEthereumChainParameter["nativeCurrency"] = {
-  name: "Ether",
-  symbol: "ETH",
-  decimals: 18,
-};
-
+import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
+import { CounterDataService } from '../services/counterDataService';
 
 export const CHAINS: {
-  [chainId: number]: ChainInformation;
+  [chainId: number]: Chain;
 } = {
-  5: {
-    urls: [
-      RPC_URL,
-    ],
-    nativeCurrency: ETH,
-    name: "Goereli testnet",
-    blockExplorerUrls: ["https://etherscan.io"],
+  [goerli.id]: {
+    ...goerli,
+    rpcUrls: {
+      ...goerli.rpcUrls,
+      default: {
+        ...goerli.rpcUrls.default,
+        http: ['https://ethereum-goerli.publicnode.com'],
+      },
+    },
   },
 };
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
 
-export type Web3Slice = BaseWeb3Slice & {
-  // here application custom properties
-  rpcProvider: ethers.providers.JsonRpcBatchProvider;
+export type IWeb3Slice = IWalletSlice & {
   counterDataService: CounterDataService;
+  connectSigner: () => void;
 };
 
 // having separate rpc provider for reading data only
 export const getDefaultRPCProviderForReadData = () => {
-  return chainInfoHelpers.providerInstances[5].instance
+  return chainInfoHelpers.clientInstances[goerli.id].instance;
 };
 
-export const createWeb3Slice: StoreSlice<Web3Slice> = (set, get) => ({
-  ...createWeb3BaseSlice({
+export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
+  set,
+  get,
+) => ({
+  ...createWalletSlice({
     walletConnected: () => {
-      const activeWallet = get().activeWallet;
-      if (activeWallet) {
-        get().counterDataService.connectSigner(activeWallet.signer);
-      }
+      get().connectSigner();
     },
-    getChainParameters: chainInfoHelpers.getChainParameters,
-    desiredChainID: DESIRED_CHAIN_ID,
   })(set, get),
-  rpcProvider: getDefaultRPCProviderForReadData(),
   counterDataService: new CounterDataService(
-    getDefaultRPCProviderForReadData()
+    getDefaultRPCProviderForReadData(),
   ),
+  connectSigner() {
+    const activeWallet = get().activeWallet;
+    if (activeWallet && activeWallet.walletClient) {
+      get().counterDataService.connectSigner(activeWallet.walletClient);
+    }
+  },
 });

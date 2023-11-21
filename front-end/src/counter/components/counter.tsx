@@ -1,25 +1,46 @@
-import React, { useEffect } from "react";
-import { useStore } from "../../store";
-import { selectCurrentCounteValue } from "../store/counterSelectors";
+import React, { useEffect } from 'react';
+
+import { useStore } from '../../store';
+import { useLastTxLocalStatus } from '../../transactions/useLastTxLocalStatus';
+import { selectCurrentCounterValue } from '../store/counterSelectors';
 
 export const Counter = () => {
-  const getCounterValue = useStore((store) => store.getCounterValue);
-  const loading = useStore((store) => store.counterLoading);
-  const counterValue = useStore(selectCurrentCounteValue);
+  const store = useStore();
+  const {
+    getCounterValue,
+    counterLoading,
+    increment,
+    decrement,
+    incrementGelato,
+    decrementGelato,
+  } = store;
 
-  const increment = useStore((store) => store.increment);
-  const decrement = useStore((store) => store.decrement);
+  const counterValue = selectCurrentCounterValue(store);
+
+  const { executeTxWithLocalStatuses } = useLastTxLocalStatus({
+    type: 'increment',
+    payload: {},
+  });
 
   useEffect(() => {
     getCounterValue();
   }, []);
-  
+
+  const handleIncrement = async () => {
+    await executeTxWithLocalStatuses({
+      callbackFunction: async () => await increment(),
+    });
+  };
 
   return (
     <div>
-      <button onClick={increment}>+</button>
-      {loading ? "loading" : counterValue}
+      <button onClick={handleIncrement}>+</button>
+      {counterLoading ? 'loading' : counterValue}
       <button onClick={decrement}>-</button>
+      <br />
+      Gelato:
+      <button onClick={incrementGelato}>+</button>
+      <button onClick={decrementGelato}>-</button>
     </div>
   );
 };

@@ -1,18 +1,21 @@
-import create, { GetState, SetState } from 'zustand';
+import { create, StoreApi } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { CounterSlice, createCounterSlice } from '../counter/store/counterSlice';
 
+import {
+  CounterSlice,
+  createCounterSlice,
+} from '../counter/store/counterSlice';
 import {
   createTransactionsSlice,
   TransactionsSlice,
 } from '../transactions/store/transactionsSlice';
-import { createWeb3Slice, Web3Slice } from '../web3/store/web3Slice';
+import { createWeb3Slice, IWeb3Slice } from '../web3/store/web3Slice';
 
-type RootState = Web3Slice & TransactionsSlice & CounterSlice;
+type RootState = IWeb3Slice & TransactionsSlice & CounterSlice;
 
 const createRootSlice = (
-  set: SetState<RootState>,
-  get: GetState<RootState>
+  set: StoreApi<RootState>['setState'],
+  get: StoreApi<RootState>['getState'],
 ) => ({
   ...createWeb3Slice(set, get),
   ...createTransactionsSlice(set, get),
