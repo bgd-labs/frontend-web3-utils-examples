@@ -28,7 +28,6 @@ export const Counter = () => {
 
   const handleIncrement = async () => {
     await executeTxWithLocalStatuses({
-      errorMessage: 'Tx error',
       callbackFunction: async () => await increment(),
     });
   };

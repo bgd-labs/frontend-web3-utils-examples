@@ -33,9 +33,9 @@ export const WalletList = () => {
 
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'GnosisSafe' ? activeWallet.address : ''}
+        {activeWallet?.walletType === 'Safe' ? activeWallet.address : ''}
       </div>
-      <WalletListItem walletType="GnosisSafe" />
+      <WalletListItem walletType="Safe" />
 
       <div>Wallet type Impersonated</div>
       <div>
