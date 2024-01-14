@@ -1,3 +1,4 @@
+import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import React from 'react';
 
 import { useStore } from '../../store';
@@ -5,46 +6,56 @@ import { WalletListItem } from './WalletListItem';
 
 export const WalletList = () => {
   const activeWallet = useStore((store) => store.activeWallet);
+  const { wagmiConfig } = useStore();
+
+  console.log('wagmiConfig', wagmiConfig);
+  console.log('activeWallet', activeWallet);
 
   return (
     <div>
       <div>Wallet type Injected</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'Injected' ? activeWallet.address : ''}
+        {activeWallet?.walletType === WalletType.Injected
+          ? activeWallet.address
+          : ''}
       </div>
-      <WalletListItem walletType="Injected" />
+      <WalletListItem walletType={WalletType.Injected} />
 
       <div>Wallet type Coinbase</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'Coinbase' ? activeWallet.address : ''}
+        {activeWallet?.walletType === WalletType.Coinbase
+          ? activeWallet.address
+          : ''}
       </div>
-      <WalletListItem walletType="Coinbase" />
+      <WalletListItem walletType={WalletType.Coinbase} />
 
       <div>Wallet type Wallet connect</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'WalletConnect'
+        {activeWallet?.walletType === WalletType.WalletConnect
           ? activeWallet.address
           : ''}
       </div>
-      <WalletListItem walletType="WalletConnect" />
+      <WalletListItem walletType={WalletType.WalletConnect} />
 
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'Safe' ? activeWallet.address : ''}
+        {activeWallet?.walletType === WalletType.Safe
+          ? activeWallet.address
+          : ''}
       </div>
-      <WalletListItem walletType="Safe" />
+      <WalletListItem walletType={WalletType.Safe} />
 
       <div>Wallet type Impersonated</div>
       <div>
         Account{' '}
-        {activeWallet?.walletType === 'Impersonated'
+        {activeWallet?.walletType === WalletType.Impersonated
           ? activeWallet.address
           : ''}
       </div>
-      <WalletListItem walletType="Impersonated" />
+      <WalletListItem walletType={WalletType.Impersonated} />
     </div>
   );
 };

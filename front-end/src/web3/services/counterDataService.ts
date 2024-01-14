@@ -1,6 +1,10 @@
 import { GelatoRelay, SponsoredCallRequest } from '@gelatonetwork/relay-sdk';
-import { PublicClient, WalletClient } from '@wagmi/core';
-import { encodeFunctionData, getContract } from 'viem';
+import {
+  encodeFunctionData,
+  getContract,
+  PublicClient,
+  WalletClient,
+} from 'viem';
 
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
 import { _abi as CounterAbi } from '../services/abi/CounterAbi';
@@ -16,8 +20,7 @@ export class CounterDataService {
     this.counterFactory = getContract({
       address: COUNTER_ADDRESS,
       abi: CounterAbi,
-      publicClient,
-      walletClient: this.walletClient,
+      client: publicClient,
     });
   }
 
@@ -26,8 +29,7 @@ export class CounterDataService {
     this.counterFactory = getContract({
       address: this.counterFactory.address,
       abi: this.counterFactory.abi,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
+      client: walletClient,
     });
   }
 
