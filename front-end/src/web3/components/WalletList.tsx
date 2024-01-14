@@ -6,10 +6,6 @@ import { WalletListItem } from './WalletListItem';
 
 export const WalletList = () => {
   const activeWallet = useStore((store) => store.activeWallet);
-  const { wagmiConfig } = useStore();
-
-  console.log('wagmiConfig', wagmiConfig);
-  console.log('activeWallet', activeWallet);
 
   return (
     <div>
