@@ -20,7 +20,7 @@ export function WalletListItem({ walletType }: { walletType: WalletType }) {
     if (isActive) {
       await disconnectActiveWallet();
     } else {
-      if (walletType === 'Impersonated') {
+      if (walletType === WalletType.Impersonated) {
         setImpersonated(''); // can be account address (view only mode) or private key;
       }
       await connectWallet(walletType, DESIRED_CHAIN_ID);

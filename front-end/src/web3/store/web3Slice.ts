@@ -5,25 +5,10 @@ import {
   StoreSlice,
 } from '@bgd-labs/frontend-web3-utils';
 import { goerli } from 'viem/chains';
-import { Chain } from 'wagmi';
 
 import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
+import { CHAINS } from '../../utils/chains';
 import { CounterDataService } from '../services/counterDataService';
-
-export const CHAINS: {
-  [chainId: number]: Chain;
-} = {
-  [goerli.id]: {
-    ...goerli,
-    rpcUrls: {
-      ...goerli.rpcUrls,
-      default: {
-        ...goerli.rpcUrls.default,
-        http: ['https://ethereum-goerli.publicnode.com'],
-      },
-    },
-  },
-};
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
 
@@ -50,9 +35,9 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
     getDefaultRPCProviderForReadData(),
   ),
   connectSigner() {
-    const activeWallet = get().activeWallet;
-    if (activeWallet && activeWallet.walletClient) {
-      get().counterDataService.connectSigner(activeWallet.walletClient);
+    const wagmiConfig = get().wagmiConfig;
+    if (wagmiConfig) {
+      get().counterDataService.connectSigner(wagmiConfig);
     }
   },
 });
