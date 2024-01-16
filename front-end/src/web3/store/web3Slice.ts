@@ -35,9 +35,9 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
     getDefaultRPCProviderForReadData(),
   ),
   connectSigner() {
-    const activeWallet = get().activeWallet;
-    if (activeWallet && activeWallet.walletClient) {
-      get().counterDataService.connectSigner(activeWallet.walletClient);
+    const wagmiConfig = get().wagmiConfig;
+    if (wagmiConfig) {
+      get().counterDataService.connectSigner(wagmiConfig);
     }
   },
 });

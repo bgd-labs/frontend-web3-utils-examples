@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bgd-labs/frontend-web3-utils": "1.0.5-de3d380570da04c8bba09ea93c547e70c215577c.0",
+    "@bgd-labs/frontend-web3-utils": "^1.1.0",
     "@gelatonetwork/relay-sdk": "^5.5.5",
     "dayjs": "^1.11.10",
     "immer": "^10.0.3",
@@ -18,16 +18,16 @@
     "next": "^14.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "viem": "^2.0.6",
-    "wagmi": "^2.2.0"
+    "viem": "^2.1.1",
+    "wagmi": "^2.2.1"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.4",
-    "@types/node": "20.11.0",
-    "@types/react": "^18.2.47",
+    "@types/node": "^20.11.4",
+    "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-react-app": "^7.0.1",
@@ -35,7 +35,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "prettier": "^3.2.1",
+    "prettier": "^3.2.2",
     "typescript": "^5.3.3"
   }
 }

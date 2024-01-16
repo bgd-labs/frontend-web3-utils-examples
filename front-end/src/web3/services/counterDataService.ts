@@ -1,10 +1,7 @@
 import { GelatoRelay, SponsoredCallRequest } from '@gelatonetwork/relay-sdk';
-import {
-  encodeFunctionData,
-  getContract,
-  PublicClient,
-  WalletClient,
-} from 'viem';
+import { writeContract } from '@wagmi/core';
+import { Client, encodeFunctionData, getContract } from 'viem';
+import { Config } from 'wagmi';
 
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
 import { _abi as CounterAbi } from '../services/abi/CounterAbi';
@@ -13,24 +10,19 @@ import { _abi as CounterAbi } from '../services/abi/CounterAbi';
 
 export class CounterDataService {
   private counterFactory;
-  private publicClient: PublicClient;
-  private walletClient: WalletClient | undefined = undefined;
-  constructor(publicClient: PublicClient) {
-    this.publicClient = publicClient;
+  private client: Client;
+  private wagmiConfig: Config | undefined = undefined;
+  constructor(client: Client) {
+    this.client = client;
     this.counterFactory = getContract({
       address: COUNTER_ADDRESS,
       abi: CounterAbi,
-      client: publicClient,
+      client: client,
     });
   }
 
-  public connectSigner(walletClient: WalletClient) {
-    this.walletClient = walletClient;
-    this.counterFactory = getContract({
-      address: this.counterFactory.address,
-      abi: this.counterFactory.abi,
-      client: walletClient,
-    });
+  public connectSigner(wagmiConfig: Config) {
+    this.wagmiConfig = wagmiConfig;
   }
 
   async fetchCurrentNumber() {
@@ -38,25 +30,31 @@ export class CounterDataService {
   }
 
   async increment() {
-    if (this.walletClient) {
-      // @ts-ignore
-      return this.counterFactory.write.increment();
+    if (this.wagmiConfig) {
+      return writeContract(this.wagmiConfig, {
+        address: COUNTER_ADDRESS,
+        abi: CounterAbi,
+        functionName: 'increment',
+      });
     } else {
       throw new Error('CONNECT YOUR SIGNER');
     }
   }
 
   async decrement() {
-    if (this.walletClient) {
-      // @ts-ignore
-      return this.counterFactory.write.decrement();
+    if (this.wagmiConfig) {
+      return writeContract(this.wagmiConfig, {
+        address: COUNTER_ADDRESS,
+        abi: CounterAbi,
+        functionName: 'increment',
+      });
     } else {
       throw new Error('CONNECT YOUR SIGNER');
     }
   }
 
   async incrementGelato() {
-    if (this.walletClient) {
+    if (this.wagmiConfig) {
       const relay = new GelatoRelay();
       const data = encodeFunctionData({
         abi: this.counterFactory.abi,
@@ -79,7 +77,7 @@ export class CounterDataService {
   }
 
   async decrementGelato() {
-    if (this.walletClient) {
+    if (this.wagmiConfig) {
       const relay = new GelatoRelay();
       const data = encodeFunctionData({
         abi: this.counterFactory.abi,
