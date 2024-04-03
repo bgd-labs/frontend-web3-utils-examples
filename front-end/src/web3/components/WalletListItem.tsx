@@ -1,16 +1,16 @@
 import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import { useMemo } from 'react';
 
-import { useStore } from '../../store';
+import { useStore } from '../../store/ZustandStoreProvider';
 import { DESIRED_CHAIN_ID } from '../../utils/constants';
 
 export function WalletListItem({ walletType }: { walletType: WalletType }) {
-  const {
-    activeWallet,
-    connectWallet,
-    disconnectActiveWallet,
-    setImpersonated,
-  } = useStore();
+  const activeWallet = useStore((store) => store.activeWallet);
+  const connectWallet = useStore((store) => store.connectWallet);
+  const disconnectActiveWallet = useStore(
+    (store) => store.disconnectActiveWallet,
+  );
+  const setImpersonated = useStore((store) => store.setImpersonated);
 
   const isActive = useMemo(() => {
     return activeWallet?.walletType === walletType;

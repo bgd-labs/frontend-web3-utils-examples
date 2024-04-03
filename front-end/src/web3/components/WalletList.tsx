@@ -1,7 +1,7 @@
 import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import React from 'react';
 
-import { useStore } from '../../store';
+import { useStore } from '../../store/ZustandStoreProvider';
 import { WalletListItem } from './WalletListItem';
 
 export const WalletList = () => {
