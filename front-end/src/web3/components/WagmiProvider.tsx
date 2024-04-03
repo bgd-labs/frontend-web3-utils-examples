@@ -1,9 +1,11 @@
+'use client';
+
 import {
   createWagmiConfig,
   WagmiZustandSync,
 } from '@bgd-labs/frontend-web3-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { WagmiProvider } from 'wagmi';
 
 import { useStore } from '../../store/ZustandStoreProvider';
@@ -13,9 +15,6 @@ import { DESIRED_CHAIN_ID } from '../../utils/constants';
 const queryClient = new QueryClient();
 
 export default function WagmiConfigProviderWrapper() {
-  // IMPORTANT !!! the active wallet must be initialized here, otherwise it gets frozen and eventually all operations with the wallet become unavailable
-  useStore((store) => store.activeWallet);
-
   const getImpersonatedAddress = useStore(
     (store) => store.getImpersonatedAddress,
   );
@@ -24,6 +23,13 @@ export default function WagmiConfigProviderWrapper() {
     (store) => store.changeActiveWalletAccount,
   );
   const setDefaultChainId = useStore((store) => store.setDefaultChainId);
+
+  const setWagmiProviderInitialize = useStore(
+    (store) => store.setWagmiProviderInitialize,
+  );
+  useEffect(() => {
+    setWagmiProviderInitialize(true);
+  }, []);
 
   const config = useMemo(() => {
     return createWagmiConfig({
@@ -42,6 +48,7 @@ export default function WagmiConfigProviderWrapper() {
         },
       },
       getImpersonatedAccount: getImpersonatedAddress,
+      ssr: true,
     });
   }, []);
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import React from 'react';
 
