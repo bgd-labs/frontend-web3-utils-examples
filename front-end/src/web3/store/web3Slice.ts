@@ -41,7 +41,7 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
     set((state) =>
       // !!! important, should be produce from immer, and we need to set value to zustand store when app initialize to work properly with wagmi
       produce(state, (draft) => {
-        draft.wagmiProviderInitialize = true;
+        draft.wagmiProviderInitialize = value;
       }),
     );
   },
