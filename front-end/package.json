@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bgd-labs/frontend-web3-utils": "1.1.3-73386f93dcab37003d0460771ce3f96aedd3a01b.0",
+    "@bgd-labs/frontend-web3-utils": "^1.2.0",
     "@gelatonetwork/relay-sdk": "^5.5.6",
     "@walletconnect/modal": "^2.6.2",
     "dayjs": "^1.11.10",
