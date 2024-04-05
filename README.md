@@ -115,25 +115,25 @@ export class CounterDataService {
 	private client: Client;
 	private wagmiConfig: Config | undefined = undefined;
 	constructor(client: Client) {
-		this.client = client;
-		this.counterFactory = getContract({
-			address: COUNTER_ADDRESS,
-			abi: CounterAbi,
-			client: client,
-		});
+          this.client = client;
+          this.counterFactory = getContract({
+	    address: COUNTER_ADDRESS,
+	    abi: CounterAbi,
+	    client: client,
+          });
 	}
 
 	public connectSigner(wagmiConfig: Config) {
-		this.wagmiConfig = wagmiConfig;
+          this.wagmiConfig = wagmiConfig;
 	}
 
 	async fetchCurrentNumber() {
-		return await this.counterFactory.read.getCurrentNumber();
+          return await this.counterFactory.read.getCurrentNumber();
 	}
 
 	async increment() {
-		if (this.wagmiConfig) {
-			return writeContract(this.wagmiConfig, {
+          if (this.wagmiConfig) {
+            return writeContract(this.wagmiConfig, {
 				address: COUNTER_ADDRESS,
 				abi: CounterAbi,
 				functionName: 'increment',
@@ -167,10 +167,7 @@ Now when we have a service for fetching smart contract data ready, let’s see h
 ```tsx
 'use client';
 
-import {
-	createWagmiConfig,
-	WagmiZustandSync,
-} from '@bgd-labs/frontend-web3-utils';
+import { createWagmiConfig, WagmiZustandSync } from '@bgd-labs/frontend-web3-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { useEffect, useMemo } from 'react';
 import { WagmiProvider } from 'wagmi';
@@ -180,22 +177,13 @@ import { useStore } from 'store';
 const queryClient = new QueryClient();
 
 export default function WagmiConfigProviderWrapper() {
-	const getImpersonatedAddress = useStore(
-			(store) => store.getImpersonatedAddress,
-	);
+	const getImpersonatedAddress = useStore((store) => store.getImpersonatedAddress);
 	const setWagmiConfig = useStore((store) => store.setWagmiConfig);
-	const changeActiveWalletAccount = useStore(
-			(store) => store.changeActiveWalletAccount,
-	);
+	const changeActiveWalletAccount = useStore((store) => store.changeActiveWalletAccount);
 	const setDefaultChainId = useStore((store) => store.setDefaultChainId);
-
-	const setWagmiProviderInitialize = useStore(
-			(store) => store.setWagmiProviderInitialize,
-	);
+	const setWagmiProviderInitialize = useStore((store) => store.setWagmiProviderInitialize);
   
-	useEffect(() => {
-		setWagmiProviderInitialize(true);
-	}, []);
+	useEffect(() => {setWagmiProviderInitialize(true)}, []);
 
 	const config = useMemo(() => {
 		return createWagmiConfig({
@@ -243,10 +231,10 @@ import WagmiConfigProviderWrapper from '../src/web3/components/WagmiProvider';
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body>
-				<WagmiConfigProviderWrapper />
-				{children}
-			</body>
+		  <body>
+		    <WagmiConfigProviderWrapper />
+		    {children}
+		  </body>
 		</html>
 	);
 };
@@ -356,25 +344,16 @@ import { create, type StoreApi, useStore as useZustandStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 // combine zustand slices to one root store
-import {
-	CounterSlice,
-	createCounterSlice,
-} from '../counter/store/counterSlice';
-import {
-	createTransactionsSlice,
-	TransactionsSlice,
-} from '../transactions/store/transactionsSlice';
+import { CounterSlice, createCounterSlice } from '../counter/store/counterSlice';
+import { createTransactionsSlice, TransactionsSlice } from '../transactions/store/transactionsSlice';
 import { createWeb3Slice, IWeb3Slice } from '../web3/store/web3Slice';
 
 export type RootState = IWeb3Slice & TransactionsSlice & CounterSlice;
 
-const createRootSlice = (
-		set: StoreApi<RootState>['setState'],
-		get: StoreApi<RootState>['getState'],
-) => ({
-	...createWeb3Slice(set, get),
-	...createTransactionsSlice(set, get),
-	...createCounterSlice(set, get),
+const createRootSlice = (set: StoreApi<RootState>['setState'], get: StoreApi<RootState>['getState']) => ({
+  ...createWeb3Slice(set, get),
+  ...createTransactionsSlice(set, get),
+  ...createCounterSlice(set, get),
 });
 
 export const useStore = create(devtools(createRootSlice, { serialize: true }));
@@ -420,15 +399,9 @@ export const createCounterSlice: StoreSlice<CounterSlice, IWeb3Slice & Transacti
 	},
 	counterLoading: true,
 	getCounterValue: async () => {
-		set({
-			counterLoading: true,
-		});
+		set({ counterLoading: true });
 		const counterValue = await get().counterDataService.fetchCurrentNumber();
-
-		set({
-			counterValue,
-			counterLoading: false,
-		});
+		set({ counterValue, counterLoading: false });
 	},
 });
 ```
