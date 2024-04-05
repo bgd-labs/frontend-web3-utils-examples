@@ -103,56 +103,57 @@ Fe-shared is design in a way to easily plug in any app which is using [Zustand](
 First let’s start with `services` folder, it’s where abi files are located, we’ll create services for each abi, to only pass the required data, do some sorting and easily mock contract responses in tests
 
 ```ts
-import { PublicClient, WalletClient } from '@wagmi/core';
-import { encodeFunctionData, getContract } from 'viem';
-import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
+import { writeContract } from '@wagmi/core';
+import { Client, getContract } from 'viem';
+import { Config } from 'wagmi';
+
+import { COUNTER_ADDRESS } from '../../utils/constants';
 import { _abi as CounterAbi } from '../services/abi/CounterAbi';
 
 export class CounterDataService {
-  private counterFactory;
-  private publicClient: PublicClient;
-  private walletClient: WalletClient | undefined = undefined;
-  constructor(publicClient: PublicClient) {
-    this.publicClient = publicClient;
-    this.counterFactory = getContract({
-      address: COUNTER_ADDRESS,
-      abi: CounterAbi,
-      publicClient,
-      walletClient: this.walletClient,
-    });
-  }
+	private counterFactory;
+	private client: Client;
+	private wagmiConfig: Config | undefined = undefined;
+	constructor(client: Client) {
+		this.client = client;
+		this.counterFactory = getContract({
+			address: COUNTER_ADDRESS,
+			abi: CounterAbi,
+			client: client,
+		});
+	}
 
-  public connectSigner(walletClient: WalletClient) {
-    this.walletClient = walletClient;
-    this.counterFactory = getContract({
-      address: this.counterFactory.address,
-      abi: this.counterFactory.abi,
-      publicClient: this.publicClient,
-      walletClient: this.walletClient,
-    });
-  }
+	public connectSigner(wagmiConfig: Config) {
+		this.wagmiConfig = wagmiConfig;
+	}
 
-  async fetchCurrentNumber() {
-    return await this.counterFactory.read.getCurrentNumber();
-  }
+	async fetchCurrentNumber() {
+		return await this.counterFactory.read.getCurrentNumber();
+	}
 
-  async increment() {
-    if (this.walletClient) {
-      // @ts-ignore
-      return this.counterFactory.write.increment();
-    } else {
-      throw new Error('CONNECT YOUR SIGNER');
-    }
-  }
+	async increment() {
+		if (this.wagmiConfig) {
+			return writeContract(this.wagmiConfig, {
+				address: COUNTER_ADDRESS,
+				abi: CounterAbi,
+				functionName: 'increment',
+			});
+		} else {
+			throw new Error('CONNECT YOUR SIGNER');
+		}
+	}
 
-  async decrement() {
-    if (this.walletClient) {
-      // @ts-ignore
-      return this.counterFactory.write.decrement();
-    } else {
-      throw new Error('CONNECT YOUR SIGNER');
-    }
-  }
+	async decrement() {
+		if (this.wagmiConfig) {
+			return writeContract(this.wagmiConfig, {
+				address: COUNTER_ADDRESS,
+				abi: CounterAbi,
+				functionName: 'increment',
+			});
+		} else {
+			throw new Error('CONNECT YOUR SIGNER');
+		}
+	}
 }
 
 ```
@@ -162,53 +163,95 @@ Each service should have some sort of `connectSigner` method. It’s done to fet
 ## Web3 slice
 Now when we have a service for fetching smart contract data ready, let’s see how we can use it properly. Conveniently, fe-shared has everything covered. To make it work, we need first to init `WagmiProvider`  this is due to some methods of `wagmi.sh` only being available through Context API
 `src/web3/components/WagmiProvider.tsx`
-```ts
-import { WagmiProvider } from '@bgd-labs/frontend-web3-utils';
-import { useStore } from '../../store';
-import { DESIRED_CHAIN_ID } from '../../utils/constants';
-import { CHAINS } from '../store/web3Slice';
+
+```tsx
+'use client';
+
+import {
+	createWagmiConfig,
+	WagmiZustandSync,
+} from '@bgd-labs/frontend-web3-utils';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { useEffect, useMemo } from 'react';
+import { WagmiProvider } from 'wagmi';
+
+import { useStore } from 'store';
+
+const queryClient = new QueryClient();
 
 export default function WagmiConfigProviderWrapper() {
-  return (
-    <WagmiProvider
-      connectorsInitProps={{
-        appName: <your_app_name>,
-        chains: CHAINS,
-        defaultChainId: DESIRED_CHAIN_ID,
-        // not required, but needed to use WalletConnect
-        wcParams: {
-          projectId: <your_project_id>,
-          metadata: {
-            name: 'wagmi',
-            description: 'my wagmi app',
-            url: 'https://wagmi.sh',
-            icons: ['https://wagmi.sh/icon.png'],
-          },
-        },
-      }}
-      useStore={useStore}
-    />
-  );
-}
+	const getImpersonatedAddress = useStore(
+			(store) => store.getImpersonatedAddress,
+	);
+	const setWagmiConfig = useStore((store) => store.setWagmiConfig);
+	const changeActiveWalletAccount = useStore(
+			(store) => store.changeActiveWalletAccount,
+	);
+	const setDefaultChainId = useStore((store) => store.setDefaultChainId);
 
+	const setWagmiProviderInitialize = useStore(
+			(store) => store.setWagmiProviderInitialize,
+	);
+  
+	useEffect(() => {
+		setWagmiProviderInitialize(true);
+	}, []);
+
+	const config = useMemo(() => {
+		return createWagmiConfig({
+			chains: chains,
+			connectorsInitProps: {
+				appName: 'Wagmi app',
+				defaultChainId: chainId,
+				wcParams: {
+					projectId: wcProjectID,
+					metadata: {
+						name: 'wagmi',
+						description: 'my wagmi app',
+						url: 'https://wagmi.sh',
+						icons: ['https://wagmi.sh/icon.png'],
+					},
+				},
+			},
+			getImpersonatedAccount: getImpersonatedAddress,
+			ssr: true,
+		});
+	}, []);
+
+	return (
+		<WagmiProvider config={config}>
+			<QueryClientProvider client={queryClient}>
+				<WagmiZustandSync
+					wagmiConfig={config}
+					defaultChainId={chainId}
+					store={{
+						setWagmiConfig,
+						changeActiveWalletAccount,
+						setDefaultChainId,
+					}}
+				/>
+			</QueryClientProvider>
+		</WagmiProvider>
+	);
+}
 ```
-`pages/_app.tsx`
-```ts
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
+
+`app/layout.tsx`
+```tsx
 import WagmiConfigProviderWrapper from '../src/web3/components/WagmiProvider';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <WagmiConfigProviderWrapper />
-      <Component {...pageProps} />
-    </>
-  );
-}
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body>
+				<WagmiConfigProviderWrapper />
+				{children}
+			</body>
+		</html>
+	);
+};
 
-export default MyApp;
-
+export default RootLayout;
 ```
 
 After that, we can finally initialize our custom Web3Slice
@@ -220,28 +263,13 @@ import {
   IWalletSlice,
   StoreSlice,
 } from '@bgd-labs/frontend-web3-utils';
-import { goerli } from 'viem/chains';
-import { Chain } from 'wagmi';
 
 import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
 import { CounterDataService } from '../services/counterDataService';
 
-export const CHAINS: {
-  [chainId: number]: Chain;
-} = {
-  [goerli.id]: goerli,
-};
-
-export const chainInfoHelpers = initChainInformationConfig(CHAINS);
-
 export type IWeb3Slice = IWalletSlice & {
   counterDataService: CounterDataService;
   connectSigner: () => void;
-};
-
-// having separate rpc provider for reading data only
-export const getDefaultRPCProviderForReadData = () => {
-  return chainInfoHelpers.clientInstances[goerli.id].instance;
 };
 
 export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
@@ -253,9 +281,7 @@ export const createWeb3Slice: StoreSlice<IWeb3Slice, TransactionsSlice> = (
       get().connectSigner();
     },
   })(set, get),
-  counterDataService: new CounterDataService(
-    getDefaultRPCProviderForReadData(),
-  ),
+  counterDataService: new CounterDataService(viemClient),
   connectSigner() {
     const activeWallet = get().activeWallet;
     if (activeWallet && activeWallet.walletClient) {
@@ -284,10 +310,6 @@ import { goerli } from 'viem/chains';
 
 import { CounterSlice } from '../../counter/store/counterSlice';
 import { getDefaultRPCProviderForReadData } from '../../web3/store/web3Slice';
-
-const clients = {
-  [goerli.id]: getDefaultRPCProviderForReadData(),
-};
 
 type IncrementTX = BaseTx & {
   type: 'increment';
@@ -318,7 +340,7 @@ export const createTransactionsSlice: StoreSlice<
           break;
       }
     },
-    defaultClients: clients,
+    defaultClients: {},
   })(set, get),
 });
 
@@ -329,28 +351,30 @@ export const createTransactionsSlice: StoreSlice<
 The setup is almost done, we only need to add slices to root slice 
 `src/store/index.ts`
 ```ts
-import { create, StoreApi } from 'zustand';
+import { createContext, type ReactNode, useContext, useRef } from 'react';
+import { create, type StoreApi, useStore as useZustandStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+// combine zustand slices to one root store
 import {
-  CounterSlice,
-  createCounterSlice,
+	CounterSlice,
+	createCounterSlice,
 } from '../counter/store/counterSlice';
 import {
-  createTransactionsSlice,
-  TransactionsSlice,
+	createTransactionsSlice,
+	TransactionsSlice,
 } from '../transactions/store/transactionsSlice';
 import { createWeb3Slice, IWeb3Slice } from '../web3/store/web3Slice';
 
-type RootState = IWeb3Slice & TransactionsSlice & CounterSlice;
+export type RootState = IWeb3Slice & TransactionsSlice & CounterSlice;
 
 const createRootSlice = (
-  set: StoreApi<RootState>['setState'],
-  get: StoreApi<RootState>['getState'],
+		set: StoreApi<RootState>['setState'],
+		get: StoreApi<RootState>['getState'],
 ) => ({
-  ...createWeb3Slice(set, get),
-  ...createTransactionsSlice(set, get),
-  ...createCounterSlice(set, get),
+	...createWeb3Slice(set, get),
+	...createTransactionsSlice(set, get),
+	...createCounterSlice(set, get),
 });
 
 export const useStore = create(devtools(createRootSlice, { serialize: true }));
@@ -359,62 +383,56 @@ export const useStore = create(devtools(createRootSlice, { serialize: true }));
 It will throw an error due to `createCounterSlice` is not written yet
 ## App logic CounterSlice
 Now the app has all the setup, we can finally write the app logic itself.
-```ts
+```tsx
 import { StoreSlice } from '@bgd-labs/frontend-web3-utils';
+
 import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
-import { DESIRED_CHAIN_ID } from '../../utils/constants';
 import { IWeb3Slice } from '../../web3/store/web3Slice';
 
 export interface CounterSlice {
-  counterLoading: boolean;
-  counterValue?: bigint;
-  increment: () => Promise<void>;
-  decrement: () => Promise<void>;
-  getCounterValue: () => Promise<void>;
-  incrementGelato: () => Promise<void>;
-  decrementGelato: () => Promise<void>;
+	counterLoading: boolean;
+	counterValue?: bigint;
+	increment: () => Promise<void>;
+	decrement: () => Promise<void>;
+	getCounterValue: () => Promise<void>;
 }
 
-export const createCounterSlice: StoreSlice<
-  CounterSlice,
-  IWeb3Slice & TransactionsSlice
-> = (set, get) => ({
-  increment: async () => {
-    await get().executeTx({
-      body: () => get().counterDataService.increment(),
-      params: {
-        type: 'increment',
-        payload: {},
-        desiredChainID: DESIRED_CHAIN_ID,
-      },
-    });
-  },
-  decrement: async () => {
-    await get().executeTx({
-      body: () => get().counterDataService.decrement(),
-      params: {
-        type: 'decrement',
-        payload: {},
-        desiredChainID: DESIRED_CHAIN_ID,
-      },
-    });
-  },
-  counterLoading: true,
-  getCounterValue: async () => {
-    set({
-      counterLoading: true,
-    });
-    const counterValue = await get().counterDataService.fetchCurrentNumber();
+export const createCounterSlice: StoreSlice<CounterSlice, IWeb3Slice & TransactionsSlice> = (set, get) => ({
+	increment: async () => {
+		await get().executeTx({
+			body: () => get().counterDataService.increment(),
+			params: {
+				type: 'increment',
+				payload: {},
+				desiredChainID: chainId,
+			},
+		});
+	},
+	decrement: async () => {
+		await get().executeTx({
+			body: () => get().counterDataService.decrement(),
+			params: {
+				type: 'decrement',
+				payload: {},
+				desiredChainID: chainId,
+			},
+		});
+	},
+	counterLoading: true,
+	getCounterValue: async () => {
+		set({
+			counterLoading: true,
+		});
+		const counterValue = await get().counterDataService.fetchCurrentNumber();
 
-    set({
-      counterValue,
-      counterLoading: false,
-    });
-  },
+		set({
+			counterValue,
+			counterLoading: false,
+		});
+	},
 });
-
-
 ```
+
 As you can see all data fetching is going through `get().counterDataService` this way even if the shape of the contract changes a bit, it will only affect counterDataService
 Another important part is 
 `get().executeTx({body, params})` this shape is used each time write to smart contract happens. Fe-shared will take care of switching network before constructing a transaction, saving transaction to pool and calling `txStatusChangedCallback` with any payload you’ve passed. 
