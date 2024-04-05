@@ -33,13 +33,13 @@ export const createTransactionsSlice: StoreSlice<
   IWalletSlice & CounterSlice
 > = (set, get) => ({
   ...createBaseTransactionsSlice<TransactionUnion>({
-    txStatusChangedCallback: (data) => {
+    txStatusChangedCallback: async (data) => {
       switch (data.type) {
         case 'increment':
-          get().getCounterValue();
+          await get().getCounterValue();
           break;
         case 'decrement':
-          get().getCounterValue();
+          await get().getCounterValue();
           break;
       }
     },

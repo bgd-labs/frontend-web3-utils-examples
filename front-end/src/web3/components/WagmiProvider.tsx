@@ -1,19 +1,35 @@
+'use client';
+
 import {
   createWagmiConfig,
   WagmiZustandSync,
 } from '@bgd-labs/frontend-web3-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { WagmiProvider } from 'wagmi';
 
-import { useStore } from '../../store';
+import { useStore } from '../../store/ZustandStoreProvider';
 import { CHAINS } from '../../utils/chains';
 import { DESIRED_CHAIN_ID } from '../../utils/constants';
 
 const queryClient = new QueryClient();
 
 export default function WagmiConfigProviderWrapper() {
-  const { getImpersonatedAddress } = useStore();
+  const getImpersonatedAddress = useStore(
+    (store) => store.getImpersonatedAddress,
+  );
+  const setWagmiConfig = useStore((store) => store.setWagmiConfig);
+  const changeActiveWalletAccount = useStore(
+    (store) => store.changeActiveWalletAccount,
+  );
+  const setDefaultChainId = useStore((store) => store.setDefaultChainId);
+
+  const setWagmiProviderInitialize = useStore(
+    (store) => store.setWagmiProviderInitialize,
+  );
+  useEffect(() => {
+    setWagmiProviderInitialize(true);
+  }, []);
 
   const config = useMemo(() => {
     return createWagmiConfig({
@@ -32,6 +48,7 @@ export default function WagmiConfigProviderWrapper() {
         },
       },
       getImpersonatedAccount: getImpersonatedAddress,
+      ssr: true,
     });
   }, []);
 
@@ -41,7 +58,11 @@ export default function WagmiConfigProviderWrapper() {
         <WagmiZustandSync
           wagmiConfig={config}
           defaultChainId={DESIRED_CHAIN_ID}
-          useStore={useStore}
+          store={{
+            setWagmiConfig,
+            changeActiveWalletAccount,
+            setDefaultChainId,
+          }}
         />
       </QueryClientProvider>
     </WagmiProvider>

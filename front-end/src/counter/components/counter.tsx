@@ -1,21 +1,20 @@
+'use client';
+
 import React, { useEffect } from 'react';
 
-import { useStore } from '../../store';
+import { useStore } from '../../store/ZustandStoreProvider';
 import { useLastTxLocalStatus } from '../../transactions/useLastTxLocalStatus';
 import { selectCurrentCounterValue } from '../store/counterSelectors';
 
 export const Counter = () => {
-  const store = useStore();
-  const {
-    getCounterValue,
-    counterLoading,
-    increment,
-    decrement,
-    incrementGelato,
-    decrementGelato,
-  } = store;
+  const getCounterValue = useStore((store) => store.getCounterValue);
+  const counterLoading = useStore((store) => store.counterLoading);
+  const increment = useStore((store) => store.increment);
+  const decrement = useStore((store) => store.decrement);
+  const incrementGelato = useStore((store) => store.incrementGelato);
+  const decrementGelato = useStore((store) => store.decrementGelato);
 
-  const counterValue = selectCurrentCounterValue(store);
+  const counterValue = useStore((store) => selectCurrentCounterValue(store));
 
   const { executeTxWithLocalStatuses } = useLastTxLocalStatus({
     type: 'increment',
