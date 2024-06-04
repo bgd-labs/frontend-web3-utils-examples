@@ -1,5 +1,5 @@
 {
-  "name": "simple-increment",
+  "name": "frontend-web3-utils-examples",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,37 +9,37 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bgd-labs/frontend-web3-utils": "^1.2.0",
+    "@bgd-labs/frontend-web3-utils": "1.2.2-9f367b74f92beaf95a9df8c40556ff5c98492832.0",
     "@gelatonetwork/relay-sdk": "^5.5.6",
     "@walletconnect/modal": "^2.6.2",
-    "dayjs": "^1.11.10",
+    "dayjs": "^1.11.11",
     "encoding": "^0.1.13",
-    "immer": "^10.0.4",
+    "immer": "^10.1.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "next": "^14.1.4",
-    "pino-pretty": "^11.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "viem": "^2.9.8",
-    "wagmi": "^2.5.18"
+    "next": "^14.2.3",
+    "pino-pretty": "^11.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "viem": "^2.13.5",
+    "wagmi": "^2.9.8"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.1.4",
-    "@types/node": "^20.12.3",
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.23",
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@typescript-eslint/parser": "^7.5.0",
-    "eslint": "^8.57.0",
+    "@next/eslint-plugin-next": "^14.2.3",
+    "@types/node": "^20.14.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^9.4.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^12.0.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3"
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "globals": "^15.3.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.12.0"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

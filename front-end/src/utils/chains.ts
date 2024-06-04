@@ -1,12 +1,13 @@
 import { Chain } from 'viem';
-import { goerli } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 
 // chains RPC urls
 export const initialRpcUrls: Record<number, string[]> = {
-  [goerli.id]: [
-    'https://ethereum-goerli.publicnode.com',
-    'https://goerli.blockpi.network/v1/rpc/public',
-    'https://eth-goerli.public.blastapi.io',
+  [sepolia.id]: [
+    'https://eth-sepolia.public.blastapi.io',
+    'https://endpoints.omniatech.io/v1/eth/sepolia/public',
+    'https://ethereum-sepolia.blockpi.network/v1/rpc/public',
+    'https://ethereum-sepolia.publicnode.com',
   ],
 };
 
@@ -24,5 +25,5 @@ export function setChain(chain: Chain, url?: string) {
 }
 
 export const CHAINS: Record<number, Chain> = {
-  [goerli.id]: setChain(goerli),
+  [sepolia.id]: setChain(sepolia),
 };

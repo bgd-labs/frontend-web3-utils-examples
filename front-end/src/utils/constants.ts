@@ -1,3 +1,5 @@
-export const COUNTER_ADDRESS = '0xfC5F404bEC816C6DC4F1ef4370C96bc5d0c561A9';
+import { sepolia } from 'viem/chains';
 
-export const DESIRED_CHAIN_ID = 5;
+export const COUNTER_ADDRESS = '0xAe7f46914De82028eCB7E2bF97Feb3D3dDCc2BAB';
+
+export const DESIRED_CHAIN_ID = sepolia.id;

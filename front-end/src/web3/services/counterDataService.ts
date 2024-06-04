@@ -6,14 +6,11 @@ import { Config } from 'wagmi';
 import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
 import { _abi as CounterAbi } from '../services/abi/CounterAbi';
 
-// TODO: replace this with the actual contract
-
 export class CounterDataService {
   private counterFactory;
-  private client: Client;
   private wagmiConfig: Config | undefined = undefined;
+
   constructor(client: Client) {
-    this.client = client;
     this.counterFactory = getContract({
       address: COUNTER_ADDRESS,
       abi: CounterAbi,

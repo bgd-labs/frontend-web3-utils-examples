@@ -6,7 +6,6 @@ import {
 } from '@bgd-labs/frontend-web3-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { useEffect, useMemo } from 'react';
-import { WagmiProvider } from 'wagmi';
 
 import { useStore } from '../../store/ZustandStoreProvider';
 import { CHAINS } from '../../utils/chains';
@@ -35,7 +34,7 @@ export default function WagmiConfigProviderWrapper() {
     return createWagmiConfig({
       chains: CHAINS,
       connectorsInitProps: {
-        appName: 'AAVEGovernanceV3',
+        appName: 'frontend-web3-utils-examples',
         defaultChainId: DESIRED_CHAIN_ID,
         wcParams: {
           projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || '',
@@ -53,18 +52,16 @@ export default function WagmiConfigProviderWrapper() {
   }, []);
 
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <WagmiZustandSync
-          wagmiConfig={config}
-          defaultChainId={DESIRED_CHAIN_ID}
-          store={{
-            setWagmiConfig,
-            changeActiveWalletAccount,
-            setDefaultChainId,
-          }}
-        />
-      </QueryClientProvider>
-    </WagmiProvider>
+    <QueryClientProvider client={queryClient}>
+      <WagmiZustandSync
+        wagmiConfig={config}
+        defaultChainId={DESIRED_CHAIN_ID}
+        store={{
+          setWagmiConfig,
+          changeActiveWalletAccount,
+          setDefaultChainId,
+        }}
+      />
+    </QueryClientProvider>
   );
 }

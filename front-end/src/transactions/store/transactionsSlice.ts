@@ -5,23 +5,23 @@ import {
   IWalletSlice,
   StoreSlice,
 } from '@bgd-labs/frontend-web3-utils';
-import { goerli } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 
 import { CounterSlice } from '../../counter/store/counterSlice';
-import { getDefaultRPCProviderForReadData } from '../../web3/store/web3Slice';
+import { chainInfoHelpers } from '../../web3/store/web3Slice';
 
 const clients = {
-  [goerli.id]: getDefaultRPCProviderForReadData(),
+  [sepolia.id]: chainInfoHelpers.clientInstances[sepolia.id].instance,
 };
 
 type IncrementTX = BaseTx & {
   type: 'increment';
-  payload: {};
+  payload: NonNullable<unknown>;
 };
 
 type DecrementTX = BaseTx & {
   type: 'decrement';
-  payload: {};
+  payload: NonNullable<unknown>;
 };
 
 export type TransactionUnion = IncrementTX | DecrementTX;
