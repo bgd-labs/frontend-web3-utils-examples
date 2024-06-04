@@ -23,7 +23,7 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist', 'node_modules', 'coverage', 'eslint.config.mjs'],
+    ignores: ['dist', 'node_modules', 'coverage', 'eslint.config.mjs', '.next', '.github', 'next.config.js'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "npx eslint --fix ./src"
   },
   "dependencies": {
     "@bgd-labs/frontend-web3-utils": "1.2.2-9f367b74f92beaf95a9df8c40556ff5c98492832.0",
