@@ -3,8 +3,8 @@
 import { useLastTxLocalStatus as baseUseTxLocalStatus } from '@bgd-labs/frontend-web3-utils';
 import { zeroAddress } from 'viem';
 
-import { useStore } from '../store/ZustandStoreProvider';
-import { TransactionUnion } from './store/transactionsSlice';
+import { useStore } from '../providers/ZustandStoreProvider';
+import { TransactionUnion } from '../store/transactionsSlice';
 
 export function useLastTxLocalStatus({
   type,

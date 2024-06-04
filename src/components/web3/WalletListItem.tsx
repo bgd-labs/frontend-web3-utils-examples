@@ -1,7 +1,7 @@
 import { WalletType } from '@bgd-labs/frontend-web3-utils';
 import { useMemo } from 'react';
 
-import { useStore } from '../../store/ZustandStoreProvider';
+import { useStore } from '../../providers/ZustandStoreProvider';
 import { DESIRED_CHAIN_ID } from '../../utils/constants';
 
 export function WalletListItem({ walletType }: { walletType: WalletType }) {

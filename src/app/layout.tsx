@@ -1,7 +1,7 @@
 import { Inter, Space_Grotesk } from 'next/font/google';
 
-import { ZustandStoreProvider } from '../src/store/ZustandStoreProvider';
-import WagmiConfigProviderWrapper from '../src/web3/components/WagmiProvider';
+import WagmiConfigProviderWrapper from '../providers/WagmiProvider';
+import { ZustandStoreProvider } from '../providers/ZustandStoreProvider';
 
 const inter = Inter({
   subsets: ['latin'],

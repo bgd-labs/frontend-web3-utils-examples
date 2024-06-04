@@ -7,8 +7,8 @@ import {
 } from '@bgd-labs/frontend-web3-utils';
 import { sepolia } from 'viem/chains';
 
-import { CounterSlice } from '../../counter/store/counterSlice';
-import { chainInfoHelpers } from '../../web3/store/web3Slice';
+import { CounterSlice } from './counterSlice';
+import { chainInfoHelpers } from './web3Slice';
 
 const clients = {
   [sepolia.id]: chainInfoHelpers.clientInstances[sepolia.id].instance,

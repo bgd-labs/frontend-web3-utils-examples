@@ -3,8 +3,8 @@ import { writeContract } from '@wagmi/core';
 import { Client, encodeFunctionData, getContract } from 'viem';
 import { Config } from 'wagmi';
 
-import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../../utils/constants';
-import { _abi as CounterAbi } from '../services/abi/CounterAbi';
+import { COUNTER_ADDRESS, DESIRED_CHAIN_ID } from '../utils/constants';
+import { CounterAbi } from './abi/CounterAbi';
 
 export class CounterDataService {
   private counterFactory;
@@ -34,7 +34,7 @@ export class CounterDataService {
         functionName: 'increment',
       });
     } else {
-      throw new Error('CONNECT YOUR SIGNER');
+      throw new Error('Connect wallet before process transaction.');
     }
   }
 
@@ -43,10 +43,10 @@ export class CounterDataService {
       return writeContract(this.wagmiConfig, {
         address: COUNTER_ADDRESS,
         abi: CounterAbi,
-        functionName: 'increment',
+        functionName: 'decrement',
       });
     } else {
-      throw new Error('CONNECT YOUR SIGNER');
+      throw new Error('Connect wallet before process transaction.');
     }
   }
 
@@ -69,7 +69,7 @@ export class CounterDataService {
         process.env.NEXT_PUBLIC_GELATO_API_KEY || '',
       );
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS');
+      throw new Error('Connect wallet before process transaction.');
     }
   }
 
@@ -92,7 +92,7 @@ export class CounterDataService {
         process.env.NEXT_PUBLIC_GELATO_API_KEY || '',
       );
     } else {
-      throw new Error('CONNECT YOUR SIGNERSSSSS');
+      throw new Error('Connect wallet before process transaction.');
     }
   }
 }

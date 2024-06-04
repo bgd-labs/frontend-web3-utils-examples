@@ -1,8 +1,8 @@
 import { StoreSlice } from '@bgd-labs/frontend-web3-utils';
 
-import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
-import { DESIRED_CHAIN_ID } from '../../utils/constants';
-import { IWeb3Slice } from '../../web3/store/web3Slice';
+import { DESIRED_CHAIN_ID } from '../utils/constants';
+import { TransactionsSlice } from './transactionsSlice';
+import { IWeb3Slice } from './web3Slice';
 
 export interface CounterSlice {
   counterLoading: boolean;

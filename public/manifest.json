@@ -1,7 +1,7 @@
 {
-  "short_name": "fe-shared-examples",
-  "name": "fe-shared-examples",
-  "description": "examples of fe-shared implementations",
+  "short_name": "frontend-web3-utils-examples",
+  "name": "frontend-web3-utils-examples",
+  "description": "Examples of bgd-labs-frontend-web3-utils implementations",
   "iconPath": "vercel.svg",
   "icons": [
     {

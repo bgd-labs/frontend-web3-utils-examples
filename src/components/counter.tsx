@@ -2,8 +2,8 @@
 
 import React, { useEffect } from 'react';
 
-import { useStore } from '../../store/ZustandStoreProvider';
-import { useLastTxLocalStatus } from '../../transactions/useLastTxLocalStatus';
+import { useLastTxLocalStatus } from '../hooks/useLastTxLocalStatus';
+import { useStore } from '../providers/ZustandStoreProvider';
 import { selectCurrentCounterValue } from '../store/counterSelectors';
 
 export const Counter = () => {

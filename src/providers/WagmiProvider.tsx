@@ -7,9 +7,9 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { useEffect, useMemo } from 'react';
 
-import { useStore } from '../../store/ZustandStoreProvider';
-import { CHAINS } from '../../utils/chains';
-import { DESIRED_CHAIN_ID } from '../../utils/constants';
+import { CHAINS } from '../utils/chains';
+import { DESIRED_CHAIN_ID } from '../utils/constants';
+import { useStore } from './ZustandStoreProvider';
 
 const queryClient = new QueryClient();
 

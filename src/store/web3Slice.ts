@@ -5,11 +5,11 @@ import {
   StoreSlice,
 } from '@bgd-labs/frontend-web3-utils';
 import { produce } from 'immer';
-import { goerli, sepolia } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 
-import { TransactionsSlice } from '../../transactions/store/transactionsSlice';
-import { CHAINS } from '../../utils/chains';
-import { CounterDataService } from '../services/counterDataService';
+import { CHAINS } from '../utils/chains';
+import { CounterDataService } from '../web3Services/counterDataService';
+import { TransactionsSlice } from './transactionsSlice';
 
 export const chainInfoHelpers = initChainInformationConfig(CHAINS);
 

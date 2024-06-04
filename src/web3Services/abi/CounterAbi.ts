@@ -1,4 +1,4 @@
-export const _abi = [
+export const CounterAbi = [
   {
     inputs: [],
     name: 'decrement',

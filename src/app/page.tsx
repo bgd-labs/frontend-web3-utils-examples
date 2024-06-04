@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 
-import { Counter } from '../src/counter/components/counter';
-import { WalletList } from '../src/web3/components/WalletList';
+import { Counter } from '../components/counter';
+import { WalletList } from '../components/web3/WalletList';
 
 const Home: NextPage = () => {
   return (
