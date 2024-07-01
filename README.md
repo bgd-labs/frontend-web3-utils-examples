@@ -1,5 +1,5 @@
 # Examples of frontend web3 utilities from [BGD labs](https://github.com/bgd-labs/).
-The purpose of this repo is to demonstrate how to structure front-end project to play nicely with [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/fe-shared) package.
+The purpose of this repo is to demonstrate how to structure front-end project to play nicely with [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/frontend-web3-utils) package.
 
 ## How to use web3-utils package from BGD Labs
 In this tutorial, we’ll go through building a very simple counter app, where anyone can change the number by interacting with the interface. 
@@ -59,11 +59,11 @@ Although the app logic is basic, it still should go through mandatory flow:
 4. Wait for transaction to confirm 
 5. Update data after transaction confirmation
 
-But as an application developer, it’s crucial to be able to spin up the interface as fast as possible and dealing with the same flow over and over could be tedious, that’s where [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/fe-shared) packages is useful. 
+But as an application developer, it’s crucial to be able to spin up the interface as fast as possible and dealing with the same flow over and over could be tedious, that’s where [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/frontend-web3-utils) packages is useful. 
 
 Web3-utils from [BGD labs](https://github.com/bgd-labs/) is design in a way to easily plug in any app which is using [zustand](https://github.com/pmndrs/zustand) for state management. 
 
-You can find [here](https://github.com/bgd-labs/frontend-web3-utils/tree/fix/update?tab=readme-ov-file#how-to-set-up) everything about how to integrate [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/fe-shared) package step by step.
+You can find [here](https://github.com/bgd-labs/frontend-web3-utils/tree/main?tab=readme-ov-file#how-to-set-up) everything about how to integrate [`@bgd-labs/frontend-web3-utils`](https://github.com/bgd-labs/frontend-web3-utils) package step by step.
 
 -----------------
 
@@ -126,4 +126,4 @@ Another important part is:
 
 That’s it! The business layer of our app is done, as you can see, it’s effortless to work with transactions and signers once we finished setup. Feature slices have nothing to do with transaction itself, but at the same time the app has all the flexibility to work with any type of contract.
 
-The full example is available [here](https://github.com/bgd-labs/fe-shared-examples).
+The full code example is available [here](https://github.com/bgd-labs/frontend-web3-utils-examples/tree/main/src).
